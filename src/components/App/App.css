@@ -1,4 +1,8 @@
 .App {
   font-family: 'Inter', Arial, sans-serif;
   font-style: normal;
+  /* display: flex;
+  flex-direction: column;
+  max-width: 1280px;
+  margin: auto; */
 }

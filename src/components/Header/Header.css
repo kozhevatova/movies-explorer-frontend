@@ -1,10 +1,19 @@
 .header {
   display: flex;
+  justify-content: center;
+  background-color: #5c5c5c;
+  min-height: 74px;
+}
+
+.header__container {
+  width: 100%;
+  max-width: 1280px;
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 74px;
   padding: 0 70px;
-  background-color: #5c5c5c;
+  box-sizing: border-box;
+  background-color: transparent;
 }
 
 .header_logged-in {
@@ -12,7 +21,7 @@
 }
 
 .header__logo {
-  background: center/38px 38px url('../../images/logo.svg') transparent;
+  background: center/38px 38px url('../../images/logo.svg') transparent no-repeat;
   min-width: 38px;
   min-height: 38px;
   transition: opacity 0.5s linear;

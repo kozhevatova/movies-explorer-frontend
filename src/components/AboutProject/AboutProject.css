@@ -1,0 +1,17 @@
+.project-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+}
+
+.project-info__item {
+
+}
+
+.project-info__item-title {
+  
+}
+
+.project-info__item-text {
+
+}
