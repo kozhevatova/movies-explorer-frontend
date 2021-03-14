@@ -1,0 +1,83 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 74px;
+  padding: 0 70px;
+  background-color: #5c5c5c;
+}
+
+.header_logged-in {
+  background-color: #fff;
+}
+
+.header__logo {
+  background: center/38px 38px url('../../images/logo.svg') transparent;
+  min-width: 38px;
+  min-height: 38px;
+  transition: opacity 0.5s linear;
+}
+
+.header__logo:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.header__account {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header__link {
+  font-size: 12px;
+  line-height: 1.3;
+  text-decoration: none;
+  transition: opacity 0.5s linear;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header__link:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.header__link_to-register {
+  min-height: 16px;
+  font-weight: 500;
+  color: #fff;
+  margin: 0 30px 0 0;
+  padding: 0;
+}
+
+.header__link_to-login {
+  color: #000;
+  background-color: #2BE080;
+  min-width: 76px;
+  min-height: 32px;
+  text-align: center;
+  padding: 8px 0;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.header__link_to-profile {
+  color: #000;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.1;
+  border: 2px solid rgba(170,170,170,0.2);
+  box-sizing: border-box;
+  border-radius: 50px;
+  min-height: 32px;
+  min-width: 100px;
+  padding: 0 12px;
+}
+
+.header__account-img {
+  min-width: 12px;
+  min-height: 14px;
+  margin: 0 7px 0 0;
+}
