@@ -1,9 +1,8 @@
-import { NavLink } from 'react-router-dom';
 import './NavTab.css';
 
 const NavTab = () => {
   return (
-    <div className="navtab">
+    <section className="navtab">
       <nav className="navtab__container">
         <ul className="navtab__list">
           <li className="navtab__item">
@@ -17,7 +16,7 @@ const NavTab = () => {
           </li>
         </ul>
       </nav>
-    </div>
+    </section>
 
   );
 };
