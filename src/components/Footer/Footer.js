@@ -9,13 +9,13 @@ const Footer = () => {
           <p className="footer__date">&copy; <span id="year">{new Date().getFullYear()}</span></p>
           <ul className="footer__links">
             <li className="footer__item">
-              <a className="footer__link" href="https://praktikum.yandex.ru/" rel="noreferrer">Яндекс.Практикум</a>
+              <a className="footer__link" href="https://praktikum.yandex.ru/" target="_blank" rel="noreferrer">Яндекс.Практикум</a>
             </li>
             <li className="footer__item">
-              <a className="footer__link" href="https://github.com/kozhevatova" rel="noreferrer">Github</a>
+              <a className="footer__link" href="https://github.com/kozhevatova" target="_blank" rel="noreferrer">Github</a>
             </li>
             <li className="footer__item">
-              <a className="footer__link" href="https://www.facebook.com/anna.kozhevatova/" rel="noreferrer">Facebook</a>
+              <a className="footer__link" href="https://www.facebook.com/anna.kozhevatova/" target="_blank" rel="noreferrer">Facebook</a>
             </li>
           </ul>
         </div>

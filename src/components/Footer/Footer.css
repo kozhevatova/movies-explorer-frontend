@@ -65,4 +65,10 @@
   font-weight: 400;
   font-size: 13px;
   line-height: 1.2;
+  transition: opacity 0.6s linear;
+}
+
+.footer__link:hover {
+  opacity: 0.7;
+  cursor: pointer;
 }
