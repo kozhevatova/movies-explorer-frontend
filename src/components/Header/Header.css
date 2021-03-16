@@ -5,6 +5,10 @@
   min-height: 74px;
 }
 
+.header_logged-in {
+  background-color: #fff;
+}
+
 .header__container {
   width: 100%;
   max-width: 1280px;
@@ -14,10 +18,6 @@
   padding: 0 70px;
   box-sizing: border-box;
   background-color: transparent;
-}
-
-.header_logged-in {
-  background-color: #fff;
 }
 
 .header__logo {
