@@ -3,7 +3,7 @@ import Info from '../Info/Info';
 
 const AboutProject = () => {
   return (
-    <Info title="О проекте" linkId="about-project" type="project">
+    <Info title="О проекте" linkId="about-project" type="project" content="Информация о проекте.">
       <ul className="project-info">
         <li className="project-info__item project-info__item_phase">
           <p className="project-info__text project-info__text_type_title">Дипломный проект включал 5 этапов</p>

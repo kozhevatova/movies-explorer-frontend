@@ -1,8 +1,6 @@
 .App {
   font-family: 'Inter', Arial, sans-serif;
   font-style: normal;
-  /* display: flex;
-  flex-direction: column;
-  max-width: 1280px;
-  margin: auto; */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

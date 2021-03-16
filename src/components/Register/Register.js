@@ -3,7 +3,8 @@ import './Register.css';
 
 const Register = ({ onLogoClick, onRegister }) => {
   return(
-    <AuthForm
+    <section className="register">
+      <AuthForm
       onLogoClick={onLogoClick}
       greeting="Добро пожаловать!"
       isNameVisible={true}
@@ -13,6 +14,8 @@ const Register = ({ onLogoClick, onRegister }) => {
       route="/signin"
       navLinkText="Войти"
     />
+    </section>
+    
   );
 };
 

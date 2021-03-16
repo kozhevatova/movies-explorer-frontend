@@ -45,3 +45,12 @@
   color: #000;
   border-bottom: 1px solid #000;
 }
+
+.info__anchor {
+  display: block;
+  visibility: hidden;
+  line-height: 0;
+  margin: 0;
+  padding: 0;
+  width: 0px;
+}

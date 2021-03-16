@@ -4,7 +4,7 @@ import myPhoto from '../../images/myPhoto.jpg';
 
 const AboutMe = () => {
   return (
-    <Info title="Студент" linkId="about-student" type="student">
+    <Info title="Студент" linkId="about-student" type="student" content="Информация о студенте.">
       <div className="student-info">
         <h2 className="student-info__title">Анна</h2>
         <p className="student-info__subtitle">Фронтенд-разработчик, 29 лет</p>

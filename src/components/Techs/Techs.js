@@ -3,7 +3,7 @@ import Info from '../Info/Info';
 
 const Techs = () => {
   return (
-    <Info title="Технологии" linkId="techs" type="techs">
+    <Info title="Технологии" linkId="techs" type="techs" content="Информация о технологиях.">
       <div className="techs">
         <h2 className="techs__title">Технологии</h2>
         <p className="techs__text">На курсе веб-разработки мы освоили технологии, которые применили
