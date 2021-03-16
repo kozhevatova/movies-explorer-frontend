@@ -1,11 +1,19 @@
 import FormValidator from '../components/FormValidator/FormValidator';
-import { validationConfig } from './constants';
+import { validationConfig, validationConfigForProfile } from './constants';
 
 // включить валидацию формы
-const validateForm = (form) => {
-  const formValidator = new FormValidator(validationConfig, form);
+const validateForm = (form, config) => {
+  const formValidator = new FormValidator(config, form);
   formValidator.enableValidation();
   return formValidator;
 };
 
-export { validateForm };
+const validateAuthForm = (form) => {
+  return validateForm(form, validationConfig);
+}
+
+const validateProfileForm = (form) => {
+  return validateForm(form, validationConfigForProfile);
+}
+
+export { validateAuthForm, validateProfileForm };

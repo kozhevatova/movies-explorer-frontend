@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import './AuthForm.css';
 import { emailInput, passwordInput, nameInput } from '../../utils/constants';
-import { validateForm } from '../../utils/utils';
+import { validateAuthForm } from '../../utils/utils';
 
 const AuthForm = ({ onLogoClick, greeting, isNameVisible, buttonText, handleSubmit,
   captionText, route, navLinkText }) => {
@@ -14,7 +14,7 @@ const AuthForm = ({ onLogoClick, greeting, isNameVisible, buttonText, handleSubm
   const formRef = useRef();
 
   useEffect(() => {
-    validateForm(formRef.current).enableValidation();
+    validateAuthForm(formRef.current).enableValidation();
   }, []);
 
   //запись в стейт текущие значения инпутов при вводе

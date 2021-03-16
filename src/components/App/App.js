@@ -46,6 +46,10 @@ function App() {
     setIsOnLanding(true);
   }
 
+  const handleEditProfile = () => {
+
+  }
+
   return (
     <div className="App">
       {JSON.parse(localStorage.getItem('isHeaderAndFooterVisible')) && <Header isLoggedIn={isLoggedIn} isOnLanding={isOnLanding} onLogoClick={handleLogoClick}
@@ -62,7 +66,7 @@ function App() {
           <SavedMovies />
         </Route>
         <Route exact path="/profile">
-          <Profile name="Имя пользователя" handleLogout={handleLogout}/>
+          <Profile userName="Имя пользователя" handleLogout={handleLogout} handleSubmit={handleEditProfile}/>
         </Route>
         <Route exact path="/signin">
           <Login onLogoClick={handleLogoClick} onLogin={handleLogin}/>

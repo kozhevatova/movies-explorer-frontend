@@ -11,4 +11,13 @@ const validationConfig = {
   errorSelector: '.auth__input-error',
 }
 
-export { emailInput, passwordInput, nameInput, validationConfig };
+const validationConfigForProfile = {
+  inputSelector: '.profile__input',
+  submitButtonSelector: '.profile__button',
+  inactiveButtonClass: 'profile__button_disabled',
+  inputErrorClass: 'profile__input_type_error',
+  errorClass: 'profile__input-error_active',
+  errorSelector: '.profile__input-error',
+}
+
+export { emailInput, passwordInput, nameInput, validationConfig, validationConfigForProfile };

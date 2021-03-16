@@ -58,3 +58,8 @@
   opacity: 0.7;
   cursor: pointer;
 }
+
+.portfolio__link:focus {
+  background-color: transparent;
+  outline: none;
+}

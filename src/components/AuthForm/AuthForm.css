@@ -69,7 +69,7 @@
 .auth__input-error {
   font-weight: 400;
   font-size: 10px;
-  list-style: 1.2;
+  line-height: 1.2;
   color: #ee3465;
   min-height: 12px;
   margin: 0 0 5px 0;
