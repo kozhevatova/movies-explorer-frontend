@@ -45,3 +45,16 @@
   cursor: pointer;
 }
 
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .navtab__item {
+    margin: 0 24px 0 0;
+  }
+  
+  .navtab__link {
+    color: #000;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+}
+

@@ -15,7 +15,7 @@ const Techs = () => {
           <p className="techs__item">React</p>
           <p className="techs__item">Git</p>
           <p className="techs__item">Express.js</p>
-          <p className="techs__item">MongoDB</p>
+          <p className="techs__item">mongoDB</p>
         </ul>
       </div>
     </Info>
