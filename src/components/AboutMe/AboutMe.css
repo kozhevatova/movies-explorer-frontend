@@ -1,8 +1,7 @@
 .student-info {
   display: grid;
-  grid-template-columns: 0.8fr 0.2fr;
+  width: 100%;
   max-width: 1140px;
-  column-gap: 270px;
 }
 
 .student-info__title {
@@ -26,10 +25,12 @@
 }
 
 .student-info__text {
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   grid-column: 1;
   grid-row: 3;
-  margin: 0 0 99px 0;
+  min-height: 187px;
+  margin: 0;
   padding: 0;
 }
 
@@ -66,4 +67,30 @@
   grid-column: 2;
   grid-row: 1/5;
   margin: 66px 0 0 0;
+  justify-self: flex-end;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .student-info__title {
+    margin: 66px 0 16px;
+    font-size: 40px;
+    line-height: 1;
+    max-width: 364px;
+  }
+  
+  .student-info__subtitle {
+    margin: 0 0 20px 0;
+    max-width: 364px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  
+  .student-info__text {
+    max-width: 364px;
+  }
+  
+  .student-info__photo {
+    max-width: 255px;
+    min-height: 307px;
+  }
 }

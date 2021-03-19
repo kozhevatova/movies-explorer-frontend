@@ -11,3 +11,13 @@
   padding: 70px 0 80px;
   box-sizing: border-box;
 }
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .movies-cardlist {
+    grid-template-columns: repeat(auto-fit, 339px);
+    max-width: 708px;
+    justify-content: center;
+    column-gap: 30px;
+    row-gap: 36px;
+  }
+}

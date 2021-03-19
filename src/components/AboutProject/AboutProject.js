@@ -9,13 +9,13 @@ const AboutProject = () => {
           <p className="project-info__text project-info__text_type_title">Дипломный проект включал 5 этапов</p>
         </li>
         <li className="project-info__item project-info__item_phase-descr">
-          <p className="project-info__text">Составление плана, работу над бэкендом, вёрстку, добавление функциональности и финальные доработки.</p>
+          <p className="project-info__text project-info__text_type_description">Составление плана, работу над бэкендом, вёрстку, добавление функциональности и финальные доработки.</p>
         </li>
         <li className="project-info__item project-info__item_timing">
           <p className="project-info__text project-info__text_type_title">На выполнение диплома ушло 5 недель</p>
         </li>
         <li className="project-info__item project-info__item_timing-descr">
-          <p className="project-info__text">У каждого этапа был мягкий и жесткий дедлайн, которые нужно было соблюдать, чтобы успешно защититься.</p>
+          <p className="project-info__text project-info__text_type_description">У каждого этапа был мягкий и жесткий дедлайн, которые нужно было соблюдать, чтобы успешно защититься.</p>
         </li>
       </ul>
       <div className="project-info__scale">

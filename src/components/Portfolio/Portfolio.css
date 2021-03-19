@@ -40,7 +40,7 @@
 
 .portfolio__link {
   display: block;
-  width: 1140px;
+  width: 100%;
   font-weight: 400;
   font-size: 30px;
   line-height: 1.66;
@@ -51,6 +51,7 @@
   padding: 0 0 19px 0;
   background: right 12px/24px 24px url('../../images//linkArrow.svg') transparent no-repeat;
   border-bottom: 1px solid #e8e8e8;
+  box-sizing: border-box;
   transition: opacity 0.6s linear;
 }
 
@@ -62,4 +63,20 @@
 .portfolio__link:focus {
   background-color: transparent;
   outline: none;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .portfolio {
+    min-height: 390px;
+  }
+  
+  .portfolio__container {
+    padding: 0 50px;
+  }
+
+  .portfolio__link {
+    font-size: 28px;
+    line-height: 1.8;
+    background: right 12px/22px 22px url('../../images//linkArrow.svg') transparent no-repeat;
+  }
 }

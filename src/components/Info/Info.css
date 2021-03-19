@@ -54,3 +54,30 @@
   padding: 0;
   width: 0px;
 }
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .info_type_project {
+    min-height: 585px;
+  }
+  
+  .info_type_techs {
+    min-height: 567px;
+  }
+  
+  .info_type_student {
+    min-height: 514px;
+  }
+  
+  .info__container_type_project {
+    padding: 90px 50px;
+  }
+  
+  .info__container_type_techs {
+    padding: 90px 50px;
+  }
+  
+  .info__container_type_student {
+    padding: 90px 50px;
+  }
+
+}

@@ -23,3 +23,17 @@
   line-height: 1.2;
   color: #fff;
 }
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .promo {
+    min-height: 784px;
+  }
+  
+  .promo__container {
+    background: 50% 224px/320px 320px url('../../images//landingLogo.svg') transparent no-repeat;
+  }
+  
+  .promo__title {
+    margin: 326px 0 0 0;
+  }
+}

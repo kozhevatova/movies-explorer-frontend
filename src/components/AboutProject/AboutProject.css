@@ -8,9 +8,7 @@
   column-gap: 40px;
 }
 
-.project-info__item {
-
-}
+.project-info__item {}
 
 .project-info__item_phase {
   grid-column: 1;
@@ -39,6 +37,8 @@
   font-size: 14px;
   line-height: 1.4;
 }
+
+.project-info__text_type_description {}
 
 .project-info__text_type_title {
   font-size: 20px;
@@ -82,4 +82,21 @@
   background-color: #f2f2f2;
   grid-column: 2;
   grid-row: 1;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .project-info {
+    list-style: none;
+    margin: 70px 0 93px;
+    row-gap: 22px;
+    column-gap: 30px;
+  }
+
+  .project-info__text_type_description {
+    font-size: 12px;
+  }
+
+  .project-info__text_type_title {
+    font-size: 20px;
+  }
 }
