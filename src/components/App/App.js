@@ -9,6 +9,7 @@ import { Route, Switch, useHistory } from 'react-router';
 import Profile from '../Profile/Profile';
 import Login from '../Login/Login';
 import Register from '../Register/Register';
+import NotFoundPage from '../NotFoundPage/NotFoundPage';
 
 function App() {
   const history = useHistory();
@@ -76,6 +77,9 @@ function App() {
         </Route>
         <Route exact path="/signup">
           <Register onLogoClick={handleLogoClick} onRegister={handleRegister}/>
+        </Route>
+        <Route path="*">
+          <NotFoundPage />
         </Route>
       </Switch>
 
