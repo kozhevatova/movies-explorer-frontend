@@ -104,6 +104,10 @@
   opacity: 0.2;
 }
 
+.auth__submit-btn:focus {
+  outline: none;
+}
+
 .auth__caption {
   font-weight: 400;
   font-size: 14px;

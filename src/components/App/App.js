@@ -14,36 +14,39 @@ function App() {
   const history = useHistory();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isOnLanding, setIsOnLanding] = useState(false);
+  const [isHeaderAndFooterVisible, setIsHeaderAndFooterVisible] = useState(true);
 
   const handleLoginClick = () => {
     setIsOnLanding(false);
-    localStorage.setItem('isHeaderAndFooterVisible', false);
+    setIsHeaderAndFooterVisible(false);
   };
 
   const handleRegisterClick = () => {
     setIsOnLanding(false);
-    localStorage.setItem('isHeaderAndFooterVisible', false);
+    setIsHeaderAndFooterVisible(false);
   }
 
   const handleLogoClick = () => {
     setIsOnLanding(true);
-    localStorage.setItem('isHeaderAndFooterVisible', true);
+    setIsHeaderAndFooterVisible(true);
   }
 
   const handleLogin = () => {
     setIsLoggedIn(true);
-    localStorage.setItem('isHeaderAndFooterVisible', true);
+    setIsHeaderAndFooterVisible(true);
     history.push('/movies');
   }
 
   const handleRegister = () => {
-    localStorage.setItem('isHeaderAndFooterVisible', false);
+    setIsHeaderAndFooterVisible(false);
     history.push('/signin');
   }
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     setIsOnLanding(true);
+    setIsHeaderAndFooterVisible(true);
+    history.push('/');
   }
 
   const handleEditProfile = () => {
@@ -52,7 +55,7 @@ function App() {
 
   return (
     <div className="App">
-      {JSON.parse(localStorage.getItem('isHeaderAndFooterVisible')) && <Header isLoggedIn={isLoggedIn} isOnLanding={isOnLanding} onLogoClick={handleLogoClick}
+      {isHeaderAndFooterVisible && <Header isLoggedIn={isLoggedIn} isOnLanding={isOnLanding} onLogoClick={handleLogoClick}
         onRegisterClick={handleRegisterClick} onLoginClick={handleLoginClick} />}
 
       <Switch>
@@ -76,7 +79,7 @@ function App() {
         </Route>
       </Switch>
 
-      {JSON.parse(localStorage.getItem('isHeaderAndFooterVisible')) && <Footer />}
+      {isHeaderAndFooterVisible && <Footer />}
     </div>
   );
 }
