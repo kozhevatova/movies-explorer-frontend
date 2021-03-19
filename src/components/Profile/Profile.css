@@ -146,3 +146,21 @@
   opacity: 0.7;
   cursor: pointer;
 }
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .profile {
+    padding: 236px 0 269px;
+  }
+  
+  .profile__form {
+    min-height: 411px;
+  }
+  
+  .profile__greeting {
+    margin: 0 0 96px 0;
+  }
+
+  .profile__button {
+    margin: 210px 0 16px;
+  }
+}

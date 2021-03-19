@@ -44,24 +44,26 @@ const AuthForm = ({ onLogoClick, greeting, isNameVisible, buttonText, handleSubm
       <NavLink to="/" className="auth__logo" onClick={onLogoClick} />
       <h3 className="auth__greeting">{greeting}</h3>
 
-      {isNameVisible &&
-        <div className="auth__name-area">
-          <label className="auth__label">Имя</label>
-          <input className="auth__input" placeholder="Имя" name="nameInput" required id="name-input" 
-            minLength="2" maxLength="30" value={name} onChange={handleInputChange} />
-          <span className="auth__input-error" id="name-input-error"></span>
-        </div>
-      }
+      <div className="auth__inputs">
+        {isNameVisible &&
+          <div className="auth__name-area">
+            <label className="auth__label">Имя</label>
+            <input className="auth__input" placeholder="Имя" name="nameInput" required id="name-input"
+              minLength="2" maxLength="30" value={name} onChange={handleInputChange} />
+            <span className="auth__input-error" id="name-input-error"></span>
+          </div>
+        }
 
-      <label className="auth__label">Email</label>
-      <input className="auth__input" placeholder="Email" type="email" name="emailInput" required
-        id="email-input" value={email} onChange={handleInputChange} />
-      <span className="auth__input-error" id="email-input-error"></span>
+        <label className="auth__label">Email</label>
+        <input className="auth__input" placeholder="Email" type="email" name="emailInput" required
+          id="email-input" value={email} onChange={handleInputChange} />
+        <span className="auth__input-error" id="email-input-error"></span>
 
-      <label className="auth__label">Пароль</label>
-      <input className="auth__input" placeholder="Пароль" type="password" minLength="8"
-        required name="passwordInput" id="password-input" value={password} onChange={handleInputChange} />
-      <span className="auth__input-error" id="password-input-error"></span>
+        <label className="auth__label">Пароль</label>
+        <input className="auth__input" placeholder="Пароль" type="password" minLength="8"
+          required name="passwordInput" id="password-input" value={password} onChange={handleInputChange} />
+        <span className="auth__input-error" id="password-input-error"></span>
+      </div>
 
       <button className="auth__submit-btn" type="submit">{buttonText}</button>
       <p className="auth__caption">{captionText}

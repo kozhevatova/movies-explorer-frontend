@@ -4,3 +4,9 @@
   background-color: #fff;
   padding: 70px 0 0 0;
 }
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .login {
+    padding-top: 232px;
+  }
+}

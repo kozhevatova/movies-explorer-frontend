@@ -3,12 +3,12 @@
   flex-direction: column;
   justify-content: start;
   border-bottom: 1px solid rgba(170,170,170,0.2);
-  padding: 70px 0 43px;
+  padding: 70px 70px 43px;
   min-height: 242px;
   box-sizing: border-box;
   margin: 0 0 10px 0;
   width: 100%;
-  max-width: 1140px;
+  max-width: 1280px;
 }
 
 .search__form {
@@ -118,11 +118,14 @@
   line-height: 1.4;
 }
 
+@media screen and (min-width: 1024px) and (max-width: 1279px) {
+
+}
+
 @media screen and (min-width: 768px) and (max-width: 1023px) {
   .search {
-    padding: 70px 0 63px;
+    padding: 70px 30px 63px;
     min-height: 250px;
-    max-width: 708px;
   }
   
   .search__input {

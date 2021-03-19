@@ -1,0 +1,35 @@
+.menu {
+  position: fixed;
+  top:0;
+  left:0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0,0,0,0.3);
+  display: none;
+  justify-content: flex-end;
+}
+
+.menu_opened {
+  display: flex;
+}
+
+.menu__area {
+  width: 520px;
+  height: 1024px;
+  background-color: #fff;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu__close-btn {
+  background: center/30px 30px url('../../images/closeMenuButton.svg') transparent no-repeat;
+  min-height: 22px;
+  width: 22px;
+  box-shadow: none;
+  border: none;
+  align-self: flex-end;
+  margin: 22px 22px 0 0;
+  padding: 0;
+}

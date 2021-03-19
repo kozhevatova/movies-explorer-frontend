@@ -10,12 +10,14 @@ import Profile from '../Profile/Profile';
 import Login from '../Login/Login';
 import Register from '../Register/Register';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
+import Menu from '../Menu/Menu';
 
 function App() {
   const history = useHistory();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isOnLanding, setIsOnLanding] = useState(false);
   const [isHeaderAndFooterVisible, setIsHeaderAndFooterVisible] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLoginClick = () => {
     setIsOnLanding(false);
@@ -54,10 +56,27 @@ function App() {
 
   }
 
+  const handleOnMainClick = () => {
+    setIsOnLanding(true);
+  }
+
+  const handleOnMoviesClick = () => {
+    setIsOnLanding(false);
+  }
+
+  const openMenu = () => {
+    setIsMenuOpen(true);
+  }
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  }
+
   return (
     <div className="App">
       {isHeaderAndFooterVisible && <Header isLoggedIn={isLoggedIn} isOnLanding={isOnLanding} onLogoClick={handleLogoClick}
-        onRegisterClick={handleRegisterClick} onLoginClick={handleLoginClick} />}
+        onRegisterClick={handleRegisterClick} onLoginClick={handleLoginClick} handleMenuOpen={openMenu}
+        handleOnMainClick={handleOnMainClick} handleOnMoviesClick={handleOnMoviesClick} />}
 
       <Switch>
         <Route exact path="/">
@@ -70,13 +89,13 @@ function App() {
           <SavedMovies />
         </Route>
         <Route exact path="/profile">
-          <Profile userName="Имя пользователя" handleLogout={handleLogout} handleSubmit={handleEditProfile}/>
+          <Profile userName="Имя пользователя" handleLogout={handleLogout} handleSubmit={handleEditProfile} />
         </Route>
         <Route exact path="/signin">
-          <Login onLogoClick={handleLogoClick} onLogin={handleLogin}/>
+          <Login onLogoClick={handleLogoClick} onLogin={handleLogin} />
         </Route>
         <Route exact path="/signup">
-          <Register onLogoClick={handleLogoClick} onRegister={handleRegister}/>
+          <Register onLogoClick={handleLogoClick} onRegister={handleRegister} />
         </Route>
         <Route path="*">
           <NotFoundPage />
@@ -84,6 +103,8 @@ function App() {
       </Switch>
 
       {isHeaderAndFooterVisible && <Footer />}
+      <Menu handleMenuClose={closeMenu} isOpen={isMenuOpen} handleOnMainClick={handleOnMainClick} 
+        handleOnMoviesClick={handleOnMoviesClick}/>
     </div>
   );
 }
