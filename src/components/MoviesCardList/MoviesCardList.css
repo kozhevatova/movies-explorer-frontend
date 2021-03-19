@@ -1,0 +1,13 @@
+.movies-cardlist {
+  display: grid;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1140px;
+  grid-template-columns: repeat(auto-fit, 270px);
+  column-gap: 20px;
+  row-gap: 32px;
+  list-style: none;
+  margin: 0;
+  padding: 70px 0 80px;
+  box-sizing: border-box;
+}

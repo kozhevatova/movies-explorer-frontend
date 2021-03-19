@@ -16,4 +16,8 @@ const validateProfileForm = (form) => {
   return validateForm(form, validationConfigForProfile);
 }
 
-export { validateAuthForm, validateProfileForm };
+const convertMinToHours = (min) => {
+  return `${Math.floor(min/60)}ч${min % 60}м`
+}
+
+export { validateAuthForm, validateProfileForm, convertMinToHours };
