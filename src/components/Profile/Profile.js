@@ -46,7 +46,8 @@ const Profile = ({ userName, handleLogout, handleSubmit }) => {
           </div>
           <div className="profile__area profile__area_type_email">
             <input className="profile__input profile__input_type_email" type="email" placeholder="Почта"
-              id="email-input" value={email} name="emailInput" onChange={handleInputChange} required></input>
+              id="email-input" value={email} name="emailInput" onChange={handleInputChange} required
+              pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,})\b"></input>
             <span className="profile__input-error" id="email-input-error"></span>
           </div>
           <p className="profile__text profile__text_type_email">Почта</p>

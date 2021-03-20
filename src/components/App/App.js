@@ -11,6 +11,7 @@ import Login from '../Login/Login';
 import Register from '../Register/Register';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import Menu from '../Menu/Menu';
+import InfoPopup from '../InfoPopup/InfoPopup';
 
 function App() {
   const history = useHistory();
@@ -18,19 +19,43 @@ function App() {
   const [isOnLanding, setIsOnLanding] = useState(false);
   const [isHeaderAndFooterVisible, setIsHeaderAndFooterVisible] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
+  const [isRegisterFailed, setIsRegisterFailed] = useState(false);
+
+  const enterLanding = () => {
+    setIsOnLanding(true);
+  }
+
+  const leaveLanding = () => {
+    setIsOnLanding(false);
+  }
+
+  const openMenu = () => {
+    setIsMenuOpen(true);
+  }
+
+  // будет открываться при ошибках в работе api
+  const openInfoPopup = () => {
+    setIsInfoPopupOpen(true);
+  }
+
+  const closeAllPopups = () => {
+    setIsMenuOpen(false);
+    setIsInfoPopupOpen(false);
+  }
 
   const handleLoginClick = () => {
-    setIsOnLanding(false);
+    leaveLanding();
     setIsHeaderAndFooterVisible(false);
   };
 
   const handleRegisterClick = () => {
-    setIsOnLanding(false);
+    leaveLanding(); 
     setIsHeaderAndFooterVisible(false);
   }
 
   const handleLogoClick = () => {
-    setIsOnLanding(true);
+    enterLanding();
     setIsHeaderAndFooterVisible(true);
   }
 
@@ -42,12 +67,15 @@ function App() {
 
   const handleRegister = () => {
     setIsHeaderAndFooterVisible(false);
+    // статус регистрации будет получен от api
+    setIsRegisterFailed(false);
+    openInfoPopup();
     history.push('/signin');
   }
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    setIsOnLanding(true);
+    enterLanding();
     setIsHeaderAndFooterVisible(true);
     history.push('/');
   }
@@ -56,28 +84,11 @@ function App() {
 
   }
 
-  const handleOnMainClick = () => {
-    setIsOnLanding(true);
-  }
-
-  const handleOnMoviesClick = () => {
-    setIsOnLanding(false);
-  }
-
-  const openMenu = () => {
-    setIsMenuOpen(true);
-  }
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  }
-
   return (
     <div className="App">
       {isHeaderAndFooterVisible && <Header isLoggedIn={isLoggedIn} isOnLanding={isOnLanding} onLogoClick={handleLogoClick}
         onRegisterClick={handleRegisterClick} onLoginClick={handleLoginClick} handleMenuOpen={openMenu}
-        handleOnMainClick={handleOnMainClick} handleOnMoviesClick={handleOnMoviesClick} />}
-
+        handleOnMainClick={enterLanding} handleOnMoviesClick={leaveLanding} handleOnAccountClick={leaveLanding}/>}
       <Switch>
         <Route exact path="/">
           <Main />
@@ -89,7 +100,7 @@ function App() {
           <SavedMovies />
         </Route>
         <Route exact path="/profile">
-          <Profile userName="Имя пользователя" handleLogout={handleLogout} handleSubmit={handleEditProfile} />
+          <Profile userName="Анна" handleLogout={handleLogout} handleSubmit={handleEditProfile} />
         </Route>
         <Route exact path="/signin">
           <Login onLogoClick={handleLogoClick} onLogin={handleLogin} />
@@ -103,8 +114,10 @@ function App() {
       </Switch>
 
       {isHeaderAndFooterVisible && <Footer />}
-      <Menu handleMenuClose={closeMenu} isOpen={isMenuOpen} handleOnMainClick={handleOnMainClick} 
-        handleOnMoviesClick={handleOnMoviesClick}/>
+
+      <Menu handleMenuClose={closeAllPopups} isOpen={isMenuOpen} handleOnMainClick={enterLanding}
+        handleOnMoviesClick={leaveLanding} handleOnAccountClick={leaveLanding} />
+      <InfoPopup closePopup={closeAllPopups} isOpen={isInfoPopupOpen} isFailed={isRegisterFailed}/>
     </div>
   );
 }

@@ -4,8 +4,8 @@ import './Navigation.css';
 import accountImg from '../../images/accountIcon.svg';
 
 
-const Navigation = ({handleOnMainClick, handleOnMoviesClick}) => {
-  const [isMoviesClicked, setIsMoviesClicked] = useState(true);
+const Navigation = ({handleOnMainClick, handleOnMoviesClick, handleOnAccountClick }) => {
+  const [isMoviesClicked, setIsMoviesClicked] = useState(false);
   const [isSavedMoviesClicked, setIsSavedMoviesClicked] = useState(false);
   const [isMainClicked, setIsMainClicked] = useState(false);
 
@@ -42,7 +42,7 @@ const Navigation = ({handleOnMainClick, handleOnMoviesClick}) => {
             onClick={handleSavedMoviesClick}>Сохраненные фильмы</NavLink>
         </div>
         <NavLink to="/profile" className="nav__account">
-          <img className="nav__account-img" src={accountImg} alt="Аккаунт" />
+          <img className="nav__account-img" src={accountImg} alt="Аккаунт" onClick={handleOnAccountClick} />
           Аккаунт
         </NavLink>
       </div>

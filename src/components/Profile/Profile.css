@@ -88,6 +88,7 @@
 
 .profile__input:focus {
   outline: none;
+  border-bottom: 1px solid rgba(170,170,170,0.2);
 }
 
 .profile__input-error {
@@ -162,5 +163,28 @@
 
   .profile__button {
     margin: 210px 0 16px;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .profile {
+    padding: 70px 0 40px;
+  }
+  
+  .profile__form {
+    max-width: 260px;
+  }
+  
+  .profile__greeting {
+    margin: 0 0 80px 0;
+  }
+
+  .profile__button {
+    margin: 379px 0 16px;
+    font-size: 12px;
+  }
+
+  .profile__link {
+    font-size: 12px;
   }
 }

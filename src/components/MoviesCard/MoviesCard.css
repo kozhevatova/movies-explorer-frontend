@@ -29,7 +29,7 @@
   padding: 0;
   max-width: 220px;
   text-overflow: ellipsis;
-  /* white-space: nowrap; */
+  white-space: nowrap;
   overflow: hidden;
 }
 
@@ -93,5 +93,21 @@
 
   .movies-card__title {
     max-width: 289px;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .movies-card {
+    max-width: 300px;
+    min-height: 235px;
+  }
+
+  .movies-card__image {
+    max-width: 300px;
+    min-height: 168px;
+  }
+
+  .movies-card__title {
+    max-width: 235px;
   }
 }

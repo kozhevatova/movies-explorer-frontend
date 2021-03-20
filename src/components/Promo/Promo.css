@@ -48,7 +48,7 @@
   }
   
   .promo__title {
-    max-width: 300px;
+    width: 93.75vw;
     margin: 207px 0 0 0;
     font-size: 31px;
   }

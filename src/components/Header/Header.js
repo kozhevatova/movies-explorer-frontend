@@ -4,7 +4,7 @@ import Navigation from '../Navigation/Navigation';
 // import accountImg from '../../images/accountIcon.svg';
 
 const Header = ({ isLoggedIn, isOnLanding, onLogoClick, onLoginClick, onRegisterClick,
-  handleMenuOpen,handleOnMainClick, handleOnMoviesClick }) => {
+  handleMenuOpen,handleOnMainClick, handleOnMoviesClick, handleOnAccountClick }) => {
   return (
 
     <header className={`header ${isLoggedIn && !isOnLanding && 'header_logged-in'}`}>
@@ -13,7 +13,8 @@ const Header = ({ isLoggedIn, isOnLanding, onLogoClick, onLoginClick, onRegister
         {
           isLoggedIn ?
             <div className="header__nav">
-              <Navigation handleOnMainClick={handleOnMainClick} handleOnMoviesClick={handleOnMoviesClick} />
+              <Navigation handleOnMainClick={handleOnMainClick} handleOnMoviesClick={handleOnMoviesClick} 
+                handleOnAccountClick={handleOnAccountClick}/>
             </div> :
             <nav className="header__options">
               <NavLink to="/signup" className="header__option header__option_to-register"

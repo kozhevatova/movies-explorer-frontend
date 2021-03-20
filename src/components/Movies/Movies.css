@@ -2,6 +2,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0 70px;
+  max-width: 1280px;
+  margin: auto;
+  box-sizing: border-box;
 }
 
 .movies__more-btn {
@@ -9,7 +13,6 @@
   max-width: 1140px;
   min-height: 36px;
   margin: 0 0 80px 0;
-  padding: 0;
   box-shadow: none;
   border: none;
   background-color: #f9f9f9;
@@ -32,7 +35,13 @@
 }
 
 @media screen and (min-width: 768px) and (max-width: 1023px) {
-  .movies__more-btn {
-    max-width: 708px;
+  .movies {
+    padding: 0 30px;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .movies {
+    padding: 0 10px;
   }
 }
