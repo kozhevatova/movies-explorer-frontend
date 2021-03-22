@@ -1,4 +1,4 @@
-class Api {
+class MainApi {
   constructor(options) {
     this.baseUrl = options.baseUrl;
   }
@@ -19,9 +19,7 @@ class Api {
     }).then((res) => this._getResponseData(res));
   }
 
-  _saveMovie(jwt, country, director, duration,
-    year, description, image, trailer, nameRU,
-    nameEN, thumbnail, movieId) {
+  saveMovie(jwt, movie) {
     return fetch(`${this.baseUrl}/movies`, {
       headers: {
         authorization: `Bearer ${jwt}`,
@@ -29,23 +27,23 @@ class Api {
       },
       method: 'POST',
       body: JSON.stringify({
-        country,
-        director,
-        duration,
-        year,
-        description,
-        image,
-        trailer,
-        nameRU,
-        nameEN,
-        thumbnail,
-        movieId
+        country: movie.country,
+        director: movie.director,
+        duration: movie.duration,
+        year: movie.year,
+        description: movie.description,
+        image: movie.image.url,
+        trailer: movie.trailerLink,
+        nameRU: movie.nameRU,
+        nameEN: movie.nameEN,
+        thumbnail: movie.thumbnail,
+        movieId: movie.id
       })
     })
       .then((res) => this._getResponseData(res));
   }
 
-  _deleteMovieFromSaved(jwt, movieId) {
+  deleteMovieFromSaved(jwt, movieId) {
     return fetch(`${this.baseUrl}/movies/${movieId}`, {
       headers: {
         authorization: `Bearer ${jwt}`,
@@ -80,16 +78,10 @@ class Api {
     })
       .then((res) => this._getResponseData(res));
   }
-
-  changeSaveStatus(movieId, isSaved, jwt) {
-    return isSaved ?
-      this._saveMovie(jwt, movieId) :
-      this._deleteMovieFromSaved(jwt, movieId);
-  }
 };
 
-const api = new Api({
+const mainApi = new MainApi({
   baseUrl: "https://api.annakin.diploma.students.nomoredomains.monster"
 });
 
-export default api;
+export default mainApi;

@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
@@ -12,6 +12,10 @@ import Register from '../Register/Register';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import Menu from '../Menu/Menu';
 import InfoPopup from '../InfoPopup/InfoPopup';
+import mainApi from '../../utils/MainApi';
+import moviesApi from '../../utils/MoviesApi';
+import * as auth from '../../utils/auth';
+import { checkIfIsShort, searchMovies } from '../../utils/utils';
 
 function App() {
   const history = useHistory();
@@ -21,6 +25,57 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
   const [isRegisterFailed, setIsRegisterFailed] = useState(false);
+  const [beatfilmMovies, setBeatfilmMovies] = useState([]);
+  const [movies, setMovies] = useState([]);
+  const [shortFilms, setShortMovies] = useState([]);
+  const [savedMovies, setSavedMovies] = useState([]);
+  const [isShortFilm, setIsShortFilm] = useState(false);
+
+  // получение всех фильмов с api beatfilms
+  useEffect(() => {
+    moviesApi.getBeatFilmMovies()
+      .then((movies) => {
+        setBeatfilmMovies(movies);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  // поиск фильма по ключевым словам и фильтр короткометражек
+  const handleSearch = (query, isShortFilm) => {
+    const result = searchMovies(beatfilmMovies, query, isShortFilm);
+    setMovies(result);
+  }
+
+  // обработчик переключения тумблера короткометражки
+  const handleTumblerClick = (isChecked, movie) => {
+    setIsShortFilm(isChecked);
+    if (movies.length > 0) {
+      const shortFilms = searchMovies(movies, movie, isChecked);
+      setShortMovies(shortFilms);
+    }
+  }
+
+  const saveMovie = (movie) => {
+    mainApi.saveMovie(movie)
+      .then((movie) => {
+        setSavedMovies([movie, ...savedMovies]);
+      })
+      .then(() => {
+        console.log(savedMovies);
+      })
+      .catch((err) => console.log(err));
+  }
+
+  const deleteMovie = (movieId) => {
+    mainApi.deleteMovieFromSaved(movieId)
+      .then((deletedMovie) => {
+        setSavedMovies(savedMovies.filter((movie) => movie.id !== deleteMovie.id));
+      })
+      .then(() => {
+        console.log(savedMovies);
+      })
+      .catch((err) => console.log(err));
+  }
 
   const enterLanding = () => {
     setIsOnLanding(true);
@@ -82,16 +137,18 @@ function App() {
     <div className="App">
       <Header pathname={location.pathname} isLoggedIn={isLoggedIn} isOnLanding={isOnLanding} onLogoClick={handleLogoClick}
         onRegisterClick={handleRegisterClick} onLoginClick={handleLoginClick} handleMenuOpen={openMenu}
-        handleOnMainClick={enterLanding} handleOnMoviesClick={leaveLanding} handleOnAccountClick={leaveLanding}/>
+        handleOnMainClick={enterLanding} handleOnMoviesClick={leaveLanding} handleOnAccountClick={leaveLanding} />
       <Switch>
         <Route exact path="/">
           <Main />
         </Route>
         <Route path="/movies">
-          <Movies />
+          <Movies movies={isShortFilm ? shortFilms : movies} handleSearchSubmit={handleSearch} 
+            handleTumblerClick={handleTumblerClick} saveMovie={saveMovie} deleteMovie={deleteMovie} />
         </Route>
         <Route exact path="/saved-movies">
-          <SavedMovies />
+          <SavedMovies movies={savedMovies} handleSearchSubmit={handleSearch} 
+            handleTumblerClick={handleTumblerClick} saveMovie={saveMovie} deleteMovie={deleteMovie}/>
         </Route>
         <Route exact path="/profile">
           <Profile userName="Анна" handleLogout={handleLogout} handleSubmit={handleEditProfile} />
@@ -111,7 +168,7 @@ function App() {
 
       <Menu handleMenuClose={closeAllPopups} isOpen={isMenuOpen} handleOnMainClick={enterLanding}
         handleOnMoviesClick={leaveLanding} handleOnAccountClick={leaveLanding} />
-      <InfoPopup closePopup={closeAllPopups} isOpen={isInfoPopupOpen} isFailed={isRegisterFailed}/>
+      <InfoPopup closePopup={closeAllPopups} isOpen={isInfoPopupOpen} isFailed={isRegisterFailed} />
     </div>
   );
 }

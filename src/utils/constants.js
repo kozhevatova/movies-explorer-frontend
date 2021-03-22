@@ -2,6 +2,7 @@ const emailInput = 'emailInput';
 const passwordInput = 'passwordInput';
 const nameInput = 'nameInput';
 const movieInput = 'movieInput';
+const shortFilmCheckbox = 'shortFilmCheckbox';
 
 const validationConfig = {
   inputSelector: '.auth__input',
@@ -21,5 +22,5 @@ const validationConfigForProfile = {
   errorSelector: '.profile__input-error',
 }
 
-export { emailInput, passwordInput, nameInput, movieInput, 
+export { emailInput, passwordInput, nameInput, movieInput, shortFilmCheckbox,
   validationConfig, validationConfigForProfile };
