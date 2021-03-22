@@ -9,6 +9,10 @@
   background-color: #fff;
 }
 
+.header_invisible {
+  display: none;
+}
+
 .header__container {
   width: 100%;
   max-width: 1280px;

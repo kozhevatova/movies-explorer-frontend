@@ -1,8 +1,12 @@
 import './Footer.css';
 
-const Footer = () => {
+const Footer = ({pathname}) => {
+  const footerClassName = (
+    `footer
+    ${(pathname === '/signin' || pathname==='/signup') && 'footer_invisible'}`
+  )
   return(
-    <footer className="footer">
+    <footer className={footerClassName}>
       <div className="footer__container">
         <p className="footer__caption">Учебный проект Яндекс.Практикум х BeatFilm</p>
         <div className="footer__info">

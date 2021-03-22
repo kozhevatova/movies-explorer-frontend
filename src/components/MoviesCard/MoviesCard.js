@@ -14,7 +14,7 @@ const MoviesCard = ({ image, nameRU, duration, isOnSavedPage }) => {
   );
 
   return (
-    <div className="movies-card">
+    <li className="movies-card">
       <img className="movies-card__image" src={image} alt={nameRU} />
       <p className="movies-card__title">{nameRU}</p>
       {
@@ -23,7 +23,7 @@ const MoviesCard = ({ image, nameRU, duration, isOnSavedPage }) => {
           <button type="button" className={saveButtonClassName} onClick={handleSaveBtnClick}></button>
       }
       <p className="movies-card__duration">{convertMinToHours(duration)}</p>
-    </div>
+    </li>
   );
 };
 
