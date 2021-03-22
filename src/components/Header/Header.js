@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import Navigation from '../Navigation/Navigation';
 // import accountImg from '../../images/accountIcon.svg';
 
-const Header = ({ pathname, isLoggedIn, isOnLanding, onLogoClick, onLoginClick, onRegisterClick,
+const Header = ({ pathname, isLoggedIn, onLogoClick, onLoginClick, onRegisterClick,
   handleMenuOpen, handleOnMainClick, handleOnMoviesClick, handleOnAccountClick }) => {
   const headerClassName = (
     `header 
