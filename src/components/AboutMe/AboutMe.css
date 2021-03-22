@@ -1,0 +1,147 @@
+.student-info {
+  display: grid;
+  width: 100%;
+  max-width: 1140px;
+}
+
+.student-info__title {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 66px 0 18px;
+  padding: 0;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 1.16;
+}
+
+.student-info__subtitle {
+  grid-column: 1;
+  grid-row: 2;
+  margin: 0 0 26px 0;
+  padding: 0;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.student-info__text {
+  width: 100%;
+  max-width: 600px;
+  grid-column: 1;
+  grid-row: 3;
+  min-height: 187px;
+  margin: 0;
+  padding: 0;
+}
+
+.student-info__links {
+  grid-column: 1;
+  grid-row: 4;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.student-info__link {
+  margin: 0 20px 0 0;
+  padding: 0;
+  text-decoration: none;
+  color: #000;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.2;
+  transition: opacity 0.6s linear;
+}
+
+.student-info__link:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.student-info__photo {
+  max-width: 270px;
+  min-height: 327px;
+  border-radius: 10px;
+  grid-column: 2;
+  grid-row: 1/5;
+  margin: 66px 0 0 0;
+  justify-self: flex-end;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .student-info__title {
+    margin: 66px 0 16px;
+    font-size: 40px;
+    line-height: 1;
+    max-width: 364px;
+  }
+  
+  .student-info__subtitle {
+    margin: 0 0 20px 0;
+    max-width: 364px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  
+  .student-info__text {
+    max-width: 364px;
+  }
+  
+  .student-info__photo {
+    max-width: 255px;
+    min-height: 307px;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .student-info__title {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 40px 0 20px;
+    font-size: 30px;
+    line-height: 1.2;
+  }
+  
+  .student-info__subtitle {
+    grid-column: 1;
+    grid-row: 3;
+    margin: 0 0 20px 0;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  
+  .student-info__text {
+    grid-column: 1;
+    grid-row: 4;
+    min-height: 112px;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  
+  .student-info__links {
+    grid-column: 1;
+    grid-row: 5;
+    margin: 40px 0 0 0;
+  }
+  
+  .student-info__link {
+    margin: 0 26px 0 0;
+  }
+  
+  .student-info__link:hover {
+    opacity: 0.7;
+    cursor: pointer;
+  }
+  
+  .student-info__photo {
+    max-width: 292px;
+    min-height: 352px;
+    grid-column: 1;
+    grid-row: 1;
+    margin: 60px 0 0 0;
+    justify-self: center;
+  }
+}
