@@ -34,7 +34,7 @@ const Profile = ({ handleLogout, handleSubmit }) => {
     if (!email || !name) {
       return;
     }
-    handleSubmit();
+    handleSubmit(email, name);
   }
   return (
     <section className="profile">

@@ -27,7 +27,10 @@ const validationConfigForProfile = {
 const registerSuccessMessage = 'Вы успешно зарегистрированы!';
 const failMessage = 'Произошла ошибка! Попробуйте ещё раз.';
 const updateSuccessMessage = 'Данные успешно обновлены!';
+const movieSearchFailedMessage = 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз';
 
-export { emailInput, passwordInput, nameInput, movieInput, shortFilmCheckbox,
-  validationConfig, validationConfigForProfile, loginType, registerType, 
-registerSuccessMessage, failMessage, updateSuccessMessage};
+export {
+  emailInput, passwordInput, nameInput, movieInput, shortFilmCheckbox,
+  validationConfig, validationConfigForProfile, loginType, registerType,
+  registerSuccessMessage, failMessage, updateSuccessMessage, movieSearchFailedMessage
+};

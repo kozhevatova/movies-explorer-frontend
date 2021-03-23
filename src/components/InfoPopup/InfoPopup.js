@@ -1,16 +1,11 @@
 import './InfoPopup.css';
 
-const InfoPopup = ({ closePopup, isOpen, isFailed, message }) => {
+const InfoPopup = ({ closePopup, isOpen, message }) => {
   return (
     <section className={`popup ${isOpen && 'popup_opened'}`}>
       <div className="popup__container">
         <button className="popup__close-btn" type="button" onClick={closePopup}></button>
-        <p className="popup__message">{message}
-          {/* {isFailed ?
-            'Произошла ошибка! Попробуйте ещё раз.' :
-            'Вы успешно зарегистрированы!'
-          } */}
-        </p>
+        <p className="popup__message">{message}</p>
       </div>
     </section>
   );

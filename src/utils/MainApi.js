@@ -1,3 +1,5 @@
+import { BASE_URL_MOVIE } from "./MoviesApi";
+
 class MainApi {
   constructor(options) {
     this.baseUrl = options.baseUrl;
@@ -27,16 +29,10 @@ class MainApi {
       },
       method: 'POST',
       body: JSON.stringify({
-        country: movie.country,
-        director: movie.director,
-        duration: movie.duration,
-        year: movie.year,
-        description: movie.description,
-        image: movie.image.url,
-        trailer: movie.trailerLink,
-        nameRU: movie.nameRU,
-        nameEN: movie.nameEN,
-        thumbnail: movie.thumbnail,
+        country: movie.country, director: movie.director, duration: movie.duration, year: movie.year, 
+        description: movie.description, image: movie.image.url ? BASE_URL_MOVIE + movie.image.url : movie.image, 
+        trailer: movie.trailer ? movie.trailer : movie.trailerLink, nameRU: movie.nameRU, nameEN: movie.nameEN, 
+        thumbnail: movie.thumbnail ? movie.thumbnail : BASE_URL_MOVIE + movie.image.formats.thumbnail.url, 
         movieId: movie.id
       })
     })
@@ -52,6 +48,10 @@ class MainApi {
       method: 'DELETE',
     })
       .then((res) => this._getResponseData(res));
+  }
+
+  toggleMovieSave(jwt, movie, movieId, isSaved) {
+    return isSaved ? this.deleteMovieFromSaved(jwt, movieId) : this.saveMovie(jwt, movie);
   }
 
   getUserInfo(jwt) {

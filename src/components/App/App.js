@@ -15,10 +15,10 @@ import InfoPopup from '../InfoPopup/InfoPopup';
 import mainApi from '../../utils/MainApi';
 import moviesApi from '../../utils/MoviesApi';
 import * as auth from '../../utils/auth';
-import { checkIfIsShort, searchMovies } from '../../utils/utils';
+import { searchMovies } from '../../utils/utils';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import { failMessage, registerSuccessMessage } from '../../utils/constants';
+import { failMessage, movieSearchFailedMessage, registerSuccessMessage, updateSuccessMessage } from '../../utils/constants';
 
 function App() {
   const history = useHistory();
@@ -36,27 +36,24 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [isFound, setIsFound] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
+  const [isRequestDone, setIsRequestDone] = useState(false);
 
-  // получение всех фильмов с api beatfilms
   useEffect(() => {
-    moviesApi.getBeatFilmMovies()
-      .then((movies) => {
-        setBeatfilmMovies(movies);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  // запись текущего юзера при логине
-  useEffect(() => {
-    console.log(isLoggedIn);
     const jwt = localStorage.getItem('jwt');
     if (isLoggedIn) {
-      mainApi.getUserInfo(jwt)
-        .then((res) => {
-          setCurrentUser({ email: res.email, name: res.name, _id: res._id });
-        })
+      Promise.all([
+        mainApi.getMovies(jwt),
+        mainApi.getUserInfo(jwt)
+      ]).then((values) => {
+        const [savedMovies, userInfo] = values;
+        localStorage.setItem('savedMovies', JSON.stringify(savedMovies))
+        setSavedMovies(JSON.parse(localStorage.getItem('savedMovies')));
+        setCurrentUser(userInfo);
+        console.log('init', savedMovies)
+      })
         .catch((err) => console.log(err));
     }
+
   }, [isLoggedIn]);
 
   // проверка залогиген ли пользователь
@@ -82,25 +79,56 @@ function App() {
     handleTokenCheck();
   }, [history]);
 
+  const updateMovies = (movies) => {
+    const moviesWithSavedOnes = movies.map((movie) => {
+      const savedItem = savedMovies.find((m) => m.movieId === movie.id);
+      if (savedItem) {
+        return savedItem;
+      } else {
+        return movie;
+      }
+    });
+    setMovies(moviesWithSavedOnes);
+  };
+
   // поиск фильма по ключевым словам и фильтр короткометражек
+  const searchPromise = (query, isShortFilm) => {
+    return new Promise((resolve, reject) => {
+      if (beatfilmMovies.length === 0) {
+        moviesApi.getBeatFilmMovies()
+          .then((movies) => {
+            setBeatfilmMovies(movies);
+            resolve(searchMovies(movies, query, isShortFilm));
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      } else {
+        resolve(searchMovies(beatfilmMovies, query, isShortFilm));
+      }
+    });
+  }
+
+  // обработка поискового запроса
   const handleSearch = (query, isShortFilm) => {
-    let result = [];
-    if (beatfilmMovies.length === 0) {
-      moviesApi.getBeatFilmMovies()
-        .then((movies) => {
-          setBeatfilmMovies(movies);
-          result = searchMovies(movies, query, isShortFilm);
-        })
-        .catch((err) => console.log(err));
-    } else {
-      result = searchMovies(beatfilmMovies, query, isShortFilm);
-    }
-    if(result.length > 0) {
-      setIsFound(true);
-    } else {
-      setIsFound(false);
-    }
-    setMovies(result);
+    searchPromise(query, isShortFilm)
+      .then((res) => {
+        if (res && res.length > 0) {
+          setIsFound(true);
+          localStorage.setItem('movies', JSON.stringify(res));
+          updateMovies(JSON.parse(localStorage.getItem('movies')));
+        } else {
+          setIsFound(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        openInfoPopup(movieSearchFailedMessage);
+      })
+      .finally(() => {
+        setIsRequestDone(true);
+      });
   }
 
   // обработчик переключения тумблера короткометражки
@@ -112,26 +140,41 @@ function App() {
     }
   }
 
+  // сохранение фильма в личном кабинете
   const saveMovie = (movie) => {
-    mainApi.saveMovie(movie)
-      .then((movie) => {
-        setSavedMovies([movie, ...savedMovies]);
-      })
-      .then(() => {
-        console.log(savedMovies);
-      })
-      .catch((err) => console.log(err));
+    const jwt = localStorage.getItem('jwt');
+    const isSaved = savedMovies.some((m) => m.movieId === movie.id);
+    if (!isSaved) {
+      mainApi.saveMovie(jwt, movie)
+        .then((movie) => {
+          setMovies(movies.map((m) => m.id === movie.movieId ? movie : m));
+          setSavedMovies([movie, ...savedMovies]);
+        })
+        .catch((err) => console.log(err))
+        .finally(() => {
+          localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
+          console.log('saved', savedMovies.length)
+        });
+    }
   }
 
-  const deleteMovie = (movieId) => {
-    mainApi.deleteMovieFromSaved(movieId)
+  // // удаление фильма из сохраненных
+  const deleteMovie = (movieId, movie) => {
+    const jwt = localStorage.getItem('jwt');
+    console.log(movie);
+    mainApi.deleteMovieFromSaved(jwt, movieId)
       .then((deletedMovie) => {
-        setSavedMovies(savedMovies.filter((movie) => movie.id !== deletedMovie.id));
+        setSavedMovies(savedMovies.filter((movie) => movie._id !== deletedMovie._id));
+        setMovies(movies.map((movie) => movie._id === movieId ? {owner: '', ...movie} : movie));
       })
       .then(() => {
-        console.log(savedMovies);
+        console.log(movies);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => {
+        localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
+        console.log('after delete', savedMovies.length);
+      });
   }
 
   const enterLanding = () => {
@@ -146,7 +189,7 @@ function App() {
     setIsMenuOpen(true);
   }
 
-  // будет открываться при ошибках в работе api
+  // попап при ошибках в работе api
   const openInfoPopup = (message) => {
     setPopupMessage(message);
     setIsInfoPopupOpen(true);
@@ -169,6 +212,7 @@ function App() {
     enterLanding();
   }
 
+  // авторизация
   const handleLogin = (email, password) => {
     auth.authorize(email, password)
       .then((data) => {
@@ -185,6 +229,7 @@ function App() {
       .catch((err) => console.log(err.message));
   }
 
+  // регистрация
   const handleRegister = (email, password, name) => {
     auth.register(email, password, name)
       .then((res) => {
@@ -205,6 +250,7 @@ function App() {
       });
   }
 
+  // выход из аккаунта
   const handleLogout = () => {
     setIsLoggedIn(false);
     setCurrentUser({})
@@ -213,7 +259,17 @@ function App() {
     history.push('/');
   }
 
-  const handleEditProfile = () => {
+  // обработчик обновления данных пользователя
+  const handleEditProfile = (email, name) => {
+    const jwt = localStorage.getItem('jwt');
+    mainApi.updateUserInfo(jwt, email, name)
+      .then((res) => {
+        if (res) {
+          setCurrentUser({ email: res.email, name: res.name, _id: res._id });
+          openInfoPopup(updateSuccessMessage);
+        }
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -227,11 +283,11 @@ function App() {
             <Main />
           </Route>
           <ProtectedRoute exact path="/movies" component={Movies} isLoggedIn={isLoggedIn} movies={isShortFilm ? shortFilms : movies}
-            handleSearchSubmit={handleSearch} handleTumblerClick={handleTumblerClick} saveMovie={saveMovie} deleteMovie={deleteMovie} 
-            isFound={isFound} />
+            handleSearchSubmit={handleSearch} handleTumblerClick={handleTumblerClick} saveMovie={saveMovie} deleteMovie={deleteMovie}
+            isFound={isFound} isRequestDone={isRequestDone} />
           <ProtectedRoute exact path="/saved-movies" component={SavedMovies} isLoggedIn={isLoggedIn} movies={savedMovies}
-            handleSearchSubmit={handleSearch} handleTumblerClick={handleTumblerClick} saveMovie={saveMovie} deleteMovie={deleteMovie} 
-            isFound={isFound} />
+            handleSearchSubmit={handleSearch} handleTumblerClick={handleTumblerClick} saveMovie={saveMovie} deleteMovie={deleteMovie}
+            isFound={savedMovies.length > 0} isRequestDone={isRequestDone} />
           <ProtectedRoute exact path="/profile" component={Profile} isLoggedIn={isLoggedIn} handleLogout={handleLogout} handleSubmit={handleEditProfile} />
           <Route exact path="/signin">
             <Login onLogoClick={handleLogoClick} onLogin={handleLogin} />
