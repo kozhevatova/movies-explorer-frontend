@@ -16,6 +16,9 @@ import mainApi from '../../utils/MainApi';
 import moviesApi from '../../utils/MoviesApi';
 import * as auth from '../../utils/auth';
 import { checkIfIsShort, searchMovies } from '../../utils/utils';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import { failMessage, registerSuccessMessage } from '../../utils/constants';
 
 function App() {
   const history = useHistory();
@@ -30,6 +33,9 @@ function App() {
   const [shortFilms, setShortMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
   const [isShortFilm, setIsShortFilm] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
+  const [isFound, setIsFound] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
 
   // получение всех фильмов с api beatfilms
   useEffect(() => {
@@ -40,9 +46,60 @@ function App() {
       .catch((err) => console.log(err));
   }, []);
 
+  // запись текущего юзера при логине
+  useEffect(() => {
+    console.log(isLoggedIn);
+    const jwt = localStorage.getItem('jwt');
+    if (isLoggedIn) {
+      mainApi.getUserInfo(jwt)
+        .then((res) => {
+          setCurrentUser({ email: res.email, name: res.name, _id: res._id });
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [isLoggedIn]);
+
+  // проверка залогиген ли пользователь
+  useEffect(() => {
+    const handleTokenCheck = () => {
+      if (localStorage.getItem('jwt')) {
+        const jwt = localStorage.getItem('jwt');
+        auth.checkToken(jwt)
+          .then((res) => {
+            if (res) {
+              setCurrentUser({ email: res.email, name: res.name, _id: res._id });
+              setIsLoggedIn(true);
+              history.push('/movies');
+            }
+            else {
+              setIsLoggedIn(false);
+              history.push('/');
+            }
+          })
+          .catch((err) => console.log(err));
+      }
+    }
+    handleTokenCheck();
+  }, [history]);
+
   // поиск фильма по ключевым словам и фильтр короткометражек
   const handleSearch = (query, isShortFilm) => {
-    const result = searchMovies(beatfilmMovies, query, isShortFilm);
+    let result = [];
+    if (beatfilmMovies.length === 0) {
+      moviesApi.getBeatFilmMovies()
+        .then((movies) => {
+          setBeatfilmMovies(movies);
+          result = searchMovies(movies, query, isShortFilm);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      result = searchMovies(beatfilmMovies, query, isShortFilm);
+    }
+    if(result.length > 0) {
+      setIsFound(true);
+    } else {
+      setIsFound(false);
+    }
     setMovies(result);
   }
 
@@ -69,7 +126,7 @@ function App() {
   const deleteMovie = (movieId) => {
     mainApi.deleteMovieFromSaved(movieId)
       .then((deletedMovie) => {
-        setSavedMovies(savedMovies.filter((movie) => movie.id !== deleteMovie.id));
+        setSavedMovies(savedMovies.filter((movie) => movie.id !== deletedMovie.id));
       })
       .then(() => {
         console.log(savedMovies);
@@ -90,7 +147,8 @@ function App() {
   }
 
   // будет открываться при ошибках в работе api
-  const openInfoPopup = () => {
+  const openInfoPopup = (message) => {
+    setPopupMessage(message);
     setIsInfoPopupOpen(true);
   }
 
@@ -111,65 +169,88 @@ function App() {
     enterLanding();
   }
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    history.push('/movies');
+  const handleLogin = (email, password) => {
+    auth.authorize(email, password)
+      .then((data) => {
+        console.log(data);
+        if (data && data.token) {
+          setCurrentUser({ email: data.email, name: data.name, _id: data._id })
+          setIsLoggedIn(true);
+          history.push('/movies');
+        } else {
+          setIsLoggedIn(false);
+          history.push('/');
+        }
+      })
+      .catch((err) => console.log(err.message));
   }
 
-  const handleRegister = () => {
-    // статус регистрации будет получен от api
-    setIsRegisterFailed(false);
-    openInfoPopup();
-    history.push('/signin');
+  const handleRegister = (email, password, name) => {
+    auth.register(email, password, name)
+      .then((res) => {
+        console.log('res', res);
+        if (res) {
+          setIsRegisterFailed(false);
+          openInfoPopup(registerSuccessMessage);
+          handleLogin(email, password);
+        } else {
+          setIsRegisterFailed(true);
+          openInfoPopup(failMessage);
+        }
+      })
+      .catch((err) => {
+        setIsRegisterFailed(true);
+        openInfoPopup(failMessage);
+        console.log(err.message);
+      });
   }
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setCurrentUser({})
     enterLanding();
+    localStorage.removeItem('jwt');
     history.push('/');
   }
 
   const handleEditProfile = () => {
-
   }
 
   return (
-    <div className="App">
-      <Header pathname={location.pathname} isLoggedIn={isLoggedIn} isOnLanding={isOnLanding} onLogoClick={handleLogoClick}
-        onRegisterClick={handleRegisterClick} onLoginClick={handleLoginClick} handleMenuOpen={openMenu}
-        handleOnMainClick={enterLanding} handleOnMoviesClick={leaveLanding} handleOnAccountClick={leaveLanding} />
-      <Switch>
-        <Route exact path="/">
-          <Main />
-        </Route>
-        <Route path="/movies">
-          <Movies movies={isShortFilm ? shortFilms : movies} handleSearchSubmit={handleSearch} 
-            handleTumblerClick={handleTumblerClick} saveMovie={saveMovie} deleteMovie={deleteMovie} />
-        </Route>
-        <Route exact path="/saved-movies">
-          <SavedMovies movies={savedMovies} handleSearchSubmit={handleSearch} 
-            handleTumblerClick={handleTumblerClick} saveMovie={saveMovie} deleteMovie={deleteMovie}/>
-        </Route>
-        <Route exact path="/profile">
-          <Profile userName="Анна" handleLogout={handleLogout} handleSubmit={handleEditProfile} />
-        </Route>
-        <Route exact path="/signin">
-          <Login onLogoClick={handleLogoClick} onLogin={handleLogin} />
-        </Route>
-        <Route exact path="/signup">
-          <Register onLogoClick={handleLogoClick} onRegister={handleRegister} />
-        </Route>
-        <Route path="*">
-          <NotFoundPage />
-        </Route>
-      </Switch>
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="App">
+        <Header pathname={location.pathname} isLoggedIn={isLoggedIn} isOnLanding={isOnLanding} onLogoClick={handleLogoClick}
+          onRegisterClick={handleRegisterClick} onLoginClick={handleLoginClick} handleMenuOpen={openMenu}
+          handleOnMainClick={enterLanding} handleOnMoviesClick={leaveLanding} handleOnAccountClick={leaveLanding} />
+        <Switch>
+          <Route exact path="/">
+            <Main />
+          </Route>
+          <ProtectedRoute exact path="/movies" component={Movies} isLoggedIn={isLoggedIn} movies={isShortFilm ? shortFilms : movies}
+            handleSearchSubmit={handleSearch} handleTumblerClick={handleTumblerClick} saveMovie={saveMovie} deleteMovie={deleteMovie} 
+            isFound={isFound} />
+          <ProtectedRoute exact path="/saved-movies" component={SavedMovies} isLoggedIn={isLoggedIn} movies={savedMovies}
+            handleSearchSubmit={handleSearch} handleTumblerClick={handleTumblerClick} saveMovie={saveMovie} deleteMovie={deleteMovie} 
+            isFound={isFound} />
+          <ProtectedRoute exact path="/profile" component={Profile} isLoggedIn={isLoggedIn} handleLogout={handleLogout} handleSubmit={handleEditProfile} />
+          <Route exact path="/signin">
+            <Login onLogoClick={handleLogoClick} onLogin={handleLogin} />
+          </Route>
+          <Route exact path="/signup">
+            <Register onLogoClick={handleLogoClick} onRegister={handleRegister} />
+          </Route>
+          <Route path="*">
+            <NotFoundPage />
+          </Route>
+        </Switch>
 
-      <Footer pathname={location.pathname} />
+        <Footer pathname={location.pathname} />
 
-      <Menu handleMenuClose={closeAllPopups} isOpen={isMenuOpen} handleOnMainClick={enterLanding}
-        handleOnMoviesClick={leaveLanding} handleOnAccountClick={leaveLanding} />
-      <InfoPopup closePopup={closeAllPopups} isOpen={isInfoPopupOpen} isFailed={isRegisterFailed} />
-    </div>
+        <Menu handleMenuClose={closeAllPopups} isOpen={isMenuOpen} handleOnMainClick={enterLanding}
+          handleOnMoviesClick={leaveLanding} handleOnAccountClick={leaveLanding} />
+        <InfoPopup closePopup={closeAllPopups} isOpen={isInfoPopupOpen} isFailed={isRegisterFailed} message={popupMessage} />
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 

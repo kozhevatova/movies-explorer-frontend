@@ -1,4 +1,5 @@
 import AuthForm from '../AuthForm/AuthForm';
+import { loginType } from '../../utils/constants';
 import './Login.css';
 
 const Login = ({ onLogoClick, onLogin }) => {
@@ -13,6 +14,7 @@ const Login = ({ onLogoClick, onLogin }) => {
         captionText="Еще не зарегистированы? "
         route="/signup"
         navLinkText="Регистрация"
+        type={loginType}
       />
     </section>
   );

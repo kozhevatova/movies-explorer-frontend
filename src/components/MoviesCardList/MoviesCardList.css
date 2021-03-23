@@ -10,7 +10,14 @@
   margin: 0;
   padding: 70px 0 80px;
   box-sizing: border-box;
+}
 
+.not-found-text {
+  font-size: 40px;
+  line-height: 1.5;
+  margin: 70px 0;
+  padding: 0;
+  text-align: center;
 }
 
 @media screen and (min-width: 1024px) and (max-width: 1279px) {
@@ -27,6 +34,11 @@
     row-gap: 36px;
     justify-content: center;
   }
+
+  .not-found-text {
+    font-size: 30px;
+    margin: 50px 0;
+  }
 }
 
 @media screen and (min-width: 320px) and (max-width: 767px) {
@@ -36,5 +48,10 @@
     row-gap: 20px;
     justify-content: center;
     padding: 40px 0 80px;
+  }
+
+  .not-found-text {
+    font-size: 20px;
+    margin: 50px 0;
   }
 }

@@ -3,6 +3,8 @@ const passwordInput = 'passwordInput';
 const nameInput = 'nameInput';
 const movieInput = 'movieInput';
 const shortFilmCheckbox = 'shortFilmCheckbox';
+const loginType = 'login';
+const registerType = 'register';
 
 const validationConfig = {
   inputSelector: '.auth__input',
@@ -22,5 +24,10 @@ const validationConfigForProfile = {
   errorSelector: '.profile__input-error',
 }
 
+const registerSuccessMessage = 'Вы успешно зарегистрированы!';
+const failMessage = 'Произошла ошибка! Попробуйте ещё раз.';
+const updateSuccessMessage = 'Данные успешно обновлены!';
+
 export { emailInput, passwordInput, nameInput, movieInput, shortFilmCheckbox,
-  validationConfig, validationConfigForProfile };
+  validationConfig, validationConfigForProfile, loginType, registerType, 
+registerSuccessMessage, failMessage, updateSuccessMessage};

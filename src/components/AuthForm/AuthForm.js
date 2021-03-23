@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import './AuthForm.css';
-import { emailInput, passwordInput, nameInput } from '../../utils/constants';
+import { emailInput, passwordInput, nameInput, loginType, registerType } from '../../utils/constants';
 import { validateAuthForm } from '../../utils/utils';
 
 const AuthForm = ({ onLogoClick, greeting, isNameVisible, buttonText, handleSubmit,
-  captionText, route, navLinkText }) => {
+  captionText, route, navLinkText, type }) => {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -36,7 +36,15 @@ const AuthForm = ({ onLogoClick, greeting, isNameVisible, buttonText, handleSubm
     if (!email || !password) {
       return;
     }
-    handleSubmit();
+    switch (type) {
+      case loginType: handleSubmit(email, password);
+        break;
+      case registerType: handleSubmit(email, password, name);
+        break;
+      default:
+        console.log(`Нет такой формы ${type}`);
+        break;
+    }
   }
 
   return (
@@ -56,8 +64,8 @@ const AuthForm = ({ onLogoClick, greeting, isNameVisible, buttonText, handleSubm
 
         <label className="auth__label">Email</label>
         <input className="auth__input" placeholder="Email" type="email" name="emailInput" required
-          id="email-input" value={email} onChange={handleInputChange} 
-          pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,})\b"/>
+          id="email-input" value={email} onChange={handleInputChange}
+          pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,})\b" />
         <span className="auth__input-error" id="email-input-error"></span>
 
         <label className="auth__label">Пароль</label>
