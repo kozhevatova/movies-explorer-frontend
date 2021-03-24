@@ -4,7 +4,7 @@ import './AuthForm.css';
 import { emailInput, passwordInput, nameInput, loginType, registerType } from '../../utils/constants';
 import { validateAuthForm } from '../../utils/utils';
 
-const AuthForm = ({ onLogoClick, greeting, isNameVisible, buttonText, handleSubmit,
+const AuthForm = ({ greeting, isNameVisible, buttonText, handleSubmit,
   captionText, route, navLinkText, type }) => {
 
   const [name, setName] = useState('');
@@ -49,7 +49,7 @@ const AuthForm = ({ onLogoClick, greeting, isNameVisible, buttonText, handleSubm
 
   return (
     <form className="auth" method="POST" onSubmit={onSubmit} ref={formRef}>
-      <NavLink to="/" className="auth__logo" onClick={onLogoClick} />
+      <NavLink to="/" className="auth__logo" />
       <h3 className="auth__greeting">{greeting}</h3>
 
       <div className="auth__inputs">

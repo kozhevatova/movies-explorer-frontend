@@ -4,12 +4,13 @@ import './Navigation.css';
 import accountImg from '../../images/accountIcon.svg';
 
 
-const Navigation = ({ handleOnSavedMoviesClick }) => {
+const Navigation = ({ handleOnSavedMoviesClick, handleOnMoviesClick }) => {
   const [isMoviesClicked, setIsMoviesClicked] = useState(false);
   const [isSavedMoviesClicked, setIsSavedMoviesClicked] = useState(false);
   const [isMainClicked, setIsMainClicked] = useState(false);
 
   const handleMoviesClick = () => {
+    handleOnMoviesClick();
     setIsMoviesClicked(true);
     setIsSavedMoviesClicked(false);
     setIsMainClicked(false);
