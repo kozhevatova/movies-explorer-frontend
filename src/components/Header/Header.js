@@ -4,7 +4,7 @@ import Navigation from '../Navigation/Navigation';
 // import accountImg from '../../images/accountIcon.svg';
 
 const Header = ({ pathname, isLoggedIn, onLogoClick, onLoginClick, onRegisterClick,
-  handleMenuOpen, handleOnMainClick, handleOnMoviesClick, handleOnAccountClick }) => {
+  handleMenuOpen, handleOnSavedMoviesClick }) => {
   const headerClassName = (
     `header 
       ${(pathname === '/movies' || pathname === '/saved-movies' || pathname==='/profile') && 'header_logged-in'}
@@ -24,8 +24,7 @@ const Header = ({ pathname, isLoggedIn, onLogoClick, onLoginClick, onRegisterCli
                 onClick={onLoginClick}>Войти</NavLink>
             </nav> :
             <div className="header__nav">
-              <Navigation handleOnMainClick={handleOnMainClick} handleOnMoviesClick={handleOnMoviesClick}
-                handleOnAccountClick={handleOnAccountClick} />
+              <Navigation handleOnSavedMoviesClick={handleOnSavedMoviesClick} />
             </div>
         }
         {isLoggedIn && <button className="header__menu-btn" type="button" onClick={handleMenuOpen}></button>}

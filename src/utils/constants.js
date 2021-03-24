@@ -28,9 +28,10 @@ const registerSuccessMessage = 'Вы успешно зарегистрирова
 const failMessage = 'Произошла ошибка! Попробуйте ещё раз.';
 const updateSuccessMessage = 'Данные успешно обновлены!';
 const movieSearchFailedMessage = 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз';
+const defaultProp = 'default';
 
 export {
   emailInput, passwordInput, nameInput, movieInput, shortFilmCheckbox,
   validationConfig, validationConfigForProfile, loginType, registerType,
-  registerSuccessMessage, failMessage, updateSuccessMessage, movieSearchFailedMessage
+  registerSuccessMessage, failMessage, updateSuccessMessage, movieSearchFailedMessage, defaultProp
 };

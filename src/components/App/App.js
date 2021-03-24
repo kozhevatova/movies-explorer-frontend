@@ -46,9 +46,12 @@ function App() {
         mainApi.getUserInfo(jwt)
       ]).then((values) => {
         const [savedMovies, userInfo] = values;
-        localStorage.setItem('savedMovies', JSON.stringify(savedMovies))
-        setSavedMovies(JSON.parse(localStorage.getItem('savedMovies')));
+        localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
+        setSavedMovies(savedMovies);
         setCurrentUser(userInfo);
+        if (localStorage.getItem('beatFilmMovies')) {
+          setBeatfilmMovies(JSON.parse(localStorage.getItem('beatFilmMovies')));
+        }
         console.log('init', savedMovies)
       })
         .catch((err) => console.log(err));
@@ -88,15 +91,18 @@ function App() {
         return movie;
       }
     });
-    setMovies(moviesWithSavedOnes);
+    localStorage.setItem('movies', JSON.stringify(moviesWithSavedOnes));
+    setMovies(JSON.parse(localStorage.getItem('movies')));
   };
 
   // поиск фильма по ключевым словам и фильтр короткометражек
   const searchPromise = (query, isShortFilm) => {
+
     return new Promise((resolve, reject) => {
       if (beatfilmMovies.length === 0) {
         moviesApi.getBeatFilmMovies()
           .then((movies) => {
+            localStorage.setItem('beatFilmMovies', JSON.stringify(movies));
             setBeatfilmMovies(movies);
             resolve(searchMovies(movies, query, isShortFilm));
           })
@@ -106,6 +112,16 @@ function App() {
           });
       } else {
         resolve(searchMovies(beatfilmMovies, query, isShortFilm));
+      }
+    });
+  }
+
+  const searchInSavedPromise = (query, isShortFilm) => {
+    return new Promise((resolve, reject) => {
+      if(savedMovies) {
+        resolve(searchMovies(savedMovies, query, isShortFilm))
+      } else {
+        reject(movieSearchFailedMessage);
       }
     });
   }
@@ -131,6 +147,26 @@ function App() {
       });
   }
 
+  const handleSearchInSaved = (query, isShortFilm) => {
+    searchInSavedPromise(query, isShortFilm)
+      .then((res) => {
+        console.log(res);
+        if (res && res.length > 0) {
+          setIsFound(true);
+          setSavedMovies(res);
+        } else {
+          setIsFound(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        openInfoPopup(movieSearchFailedMessage);
+      })
+      .finally(() => {
+        setIsRequestDone(true);
+      })
+  }
+
   // обработчик переключения тумблера короткометражки
   const handleTumblerClick = (isChecked, movie) => {
     setIsShortFilm(isChecked);
@@ -143,16 +179,18 @@ function App() {
   // сохранение фильма в личном кабинете
   const saveMovie = (movie) => {
     const jwt = localStorage.getItem('jwt');
-    const isSaved = savedMovies.some((m) => m.movieId === movie.id);
+    const localSavedMovies = JSON.parse(localStorage.getItem('savedMovies'));
+    const isSaved = localSavedMovies.some((m) => m.movieId === movie.id);
     if (!isSaved) {
       mainApi.saveMovie(jwt, movie)
         .then((movie) => {
           setMovies(movies.map((m) => m.id === movie.movieId ? movie : m));
-          setSavedMovies([movie, ...savedMovies]);
+          const newSavedMovies = [movie, ...localSavedMovies];
+          localStorage.setItem('savedMovies', JSON.stringify(newSavedMovies));
+          setSavedMovies(newSavedMovies);
         })
         .catch((err) => console.log(err))
         .finally(() => {
-          localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
           console.log('saved', savedMovies.length)
         });
     }
@@ -161,20 +199,31 @@ function App() {
   // // удаление фильма из сохраненных
   const deleteMovie = (movieId, movie) => {
     const jwt = localStorage.getItem('jwt');
+    const localSavedMovies = JSON.parse(localStorage.getItem('savedMovies'));
     console.log(movie);
     mainApi.deleteMovieFromSaved(jwt, movieId)
       .then((deletedMovie) => {
-        setSavedMovies(savedMovies.filter((movie) => movie._id !== deletedMovie._id));
-        setMovies(movies.map((movie) => movie._id === movieId ? {owner: '', ...movie} : movie));
+        const newMovies = localSavedMovies.filter((movie) => movie._id !== deletedMovie._id);
+        localStorage.setItem('savedMovies', JSON.stringify(newMovies));
+        setSavedMovies(newMovies);
+        setMovies(movies.map((movie) => movie._id === movieId ? beatfilmMovies.find((m) => m.id === movie.movieId) : movie));
       })
       .then(() => {
         console.log(movies);
       })
       .catch((err) => console.log(err))
       .finally(() => {
-        localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
         console.log('after delete', savedMovies.length);
       });
+  }
+
+  // сброс фильмов после поиска и отображение всех сохраненных фильмов
+  const handleOnSavedMoviesClick = () => {
+    const localSavedMovies = localStorage.getItem('savedMovies');
+    if(localSavedMovies) {
+      setIsFound(true);
+      setSavedMovies(JSON.parse(localSavedMovies));
+    }
   }
 
   const enterLanding = () => {
@@ -277,7 +326,7 @@ function App() {
       <div className="App">
         <Header pathname={location.pathname} isLoggedIn={isLoggedIn} isOnLanding={isOnLanding} onLogoClick={handleLogoClick}
           onRegisterClick={handleRegisterClick} onLoginClick={handleLoginClick} handleMenuOpen={openMenu}
-          handleOnMainClick={enterLanding} handleOnMoviesClick={leaveLanding} handleOnAccountClick={leaveLanding} />
+          handleOnSavedMoviesClick={handleOnSavedMoviesClick}/>
         <Switch>
           <Route exact path="/">
             <Main />
@@ -286,8 +335,8 @@ function App() {
             handleSearchSubmit={handleSearch} handleTumblerClick={handleTumblerClick} saveMovie={saveMovie} deleteMovie={deleteMovie}
             isFound={isFound} isRequestDone={isRequestDone} />
           <ProtectedRoute exact path="/saved-movies" component={SavedMovies} isLoggedIn={isLoggedIn} movies={savedMovies}
-            handleSearchSubmit={handleSearch} handleTumblerClick={handleTumblerClick} saveMovie={saveMovie} deleteMovie={deleteMovie}
-            isFound={savedMovies.length > 0} isRequestDone={isRequestDone} />
+            handleSearchSubmit={handleSearchInSaved} handleTumblerClick={handleTumblerClick} saveMovie={saveMovie} deleteMovie={deleteMovie}
+            isFound={isFound} isRequestDone={isRequestDone} />
           <ProtectedRoute exact path="/profile" component={Profile} isLoggedIn={isLoggedIn} handleLogout={handleLogout} handleSubmit={handleEditProfile} />
           <Route exact path="/signin">
             <Login onLogoClick={handleLogoClick} onLogin={handleLogin} />
@@ -302,8 +351,7 @@ function App() {
 
         <Footer pathname={location.pathname} />
 
-        <Menu handleMenuClose={closeAllPopups} isOpen={isMenuOpen} handleOnMainClick={enterLanding}
-          handleOnMoviesClick={leaveLanding} handleOnAccountClick={leaveLanding} />
+        <Menu handleMenuClose={closeAllPopups} isOpen={isMenuOpen} handleOnSavedMoviesClick={handleOnSavedMoviesClick} />
         <InfoPopup closePopup={closeAllPopups} isOpen={isInfoPopupOpen} isFailed={isRegisterFailed} message={popupMessage} />
       </div>
     </CurrentUserContext.Provider>

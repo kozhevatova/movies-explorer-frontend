@@ -1,4 +1,5 @@
 import { BASE_URL_MOVIE } from "./MoviesApi";
+import { defaultProp } from './constants';
 
 class MainApi {
   constructor(options) {
@@ -29,9 +30,15 @@ class MainApi {
       },
       method: 'POST',
       body: JSON.stringify({
-        country: movie.country, director: movie.director, duration: movie.duration, year: movie.year, 
-        description: movie.description, image: movie.image.url ? BASE_URL_MOVIE + movie.image.url : movie.image, 
-        trailer: movie.trailer ? movie.trailer : movie.trailerLink, nameRU: movie.nameRU, nameEN: movie.nameEN, 
+        country: movie.country ? movie.country : defaultProp, 
+        director: movie.director ? movie.director : defaultProp, 
+        duration: movie.duration ? movie.duration : 0, 
+        year: movie.year ? movie.year : 0, 
+        description: movie.description ? movie.description : defaultProp, 
+        image: movie.image.url ? BASE_URL_MOVIE + movie.image.url : movie.image, 
+        trailer: movie.trailer ? movie.trailer : movie.trailerLink, 
+        nameRU: movie.nameRU ? movie.nameRU : defaultProp, 
+        nameEN: movie.nameEN ? movie.nameEN : defaultProp, 
         thumbnail: movie.thumbnail ? movie.thumbnail : BASE_URL_MOVIE + movie.image.formats.thumbnail.url, 
         movieId: movie.id
       })
