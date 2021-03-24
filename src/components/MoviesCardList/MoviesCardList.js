@@ -4,6 +4,8 @@ import './MoviesCardList.css';
 import { useEffect, useState } from "react";
 
 const MoviesCardList = ({ movieList, isOnSavedPage, saveMovie, deleteMovie, isFound, isRequestDone }) => {
+  // const [moviesToRender, setMoviesToRender] = useState([]);
+
   const moviesCardlistClassName = (
     `movies-cardlist 
     ${!isRequestDone && !isOnSavedPage && 'movies-cardlist_hidden'}`
