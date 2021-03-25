@@ -28,6 +28,7 @@ function App() {
   const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
   const [isRegisterFailed, setIsRegisterFailed] = useState(false);
 
+
   // для фильмов
   const [beatfilmMovies, setBeatfilmMovies] = useState([]);
   const [movies, setMovies] = useState([]);
@@ -39,7 +40,7 @@ function App() {
   const [isRequestDone, setIsRequestDone] = useState(false);
   const [isRequestInSavedDone, setIsRequestInSavedDone] = useState(false);
   const [amountToRender, setAmountToRender] = useState(0);
-  // const [isMoreClicked, setIsMoreClicked] = useState(false);
+  const [defaultAmountToRender, setDefaultAmountToRender] = useState(0);
   const [isMoreBtnVisible, setIsMoreBtnVisible] = useState(false);
   const [isOnSavedPage, setIsOnSavedPage] = useState(false);
 
@@ -62,6 +63,11 @@ function App() {
     }
 
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    window.addEventListener('resize', checkWidth);
+    return () => window.removeEventListener('resize', checkWidth);
+  }, [])
 
   // проверка залогиген ли пользователь
   useEffect(() => {
@@ -88,12 +94,26 @@ function App() {
     localStorage.removeItem('movies');
   }, [history]);
 
-  // useEffect(() => {
-  //   const localMovies = JSON.parse(localStorage.getItem('movies'));
-  //   const moviesToRender = movies.slice(0,amountToRender);
-  //   console.log(moviesToRender);
-  //   // console.log(movies);
-  // }, [movies,amountToRender])
+  const checkWidth = () => {
+    if (window.innerWidth >= 1280) {
+      console.log('ksjdkjs');
+      setDefaultAmountToRender(4);
+      setAmountToRender(4);
+    }
+    if (window.innerWidth <= 480 && window.innerWidth >= 320) {
+      console.log('aww');
+      setDefaultAmountToRender(1);
+      setAmountToRender(1);
+    }
+    if (window.innerWidth < 1280 && window.innerWidth >= 1024) {
+      setDefaultAmountToRender(3);
+      setAmountToRender(3);
+    }
+    if (window.innerWidth <= 768 && window.innerWidth > 480) {
+      setDefaultAmountToRender(2);
+      setAmountToRender(2);
+    }
+  }
 
   // обновление найденных фильмов с учетом сохраненных
   const updateMovies = (movies) => {
@@ -107,7 +127,7 @@ function App() {
     });
     localStorage.setItem('movies', JSON.stringify(moviesWithSavedOnes));
     setMovies(moviesWithSavedOnes);
-    setAmountToRender(4);
+    // setAmountToRender(defaultAmountToRender);
   };
 
   // поиск фильма среди всех по ключевым словам и фильтр короткометражек
@@ -142,15 +162,18 @@ function App() {
 
   // обработчик поиска по всем фильмам
   const handleSearchInMovies = (query, isShortFilm) => {
+    setAmountToRender(defaultAmountToRender);
     searchPromise(query, isShortFilm)
       .then((res) => {
         if (res && res.length > 0) {
           setIsFoundInMovies(true);
           localStorage.setItem('movies', JSON.stringify(res));
+          checkWidth();
           updateMovies(res);
           setIsMoreBtnVisible(res.length > amountToRender);
         } else {
           setIsFoundInMovies(false);
+          setIsMoreBtnVisible(false);
         }
       })
       .catch((err) => {
@@ -282,18 +305,25 @@ function App() {
     if (localMovies && localMovies.length > 0) {
       setIsFoundInMovies(true);
       setIsRequestDone(true);
-      setMovies(localMovies);
+      updateMovies(localMovies);
+      setAmountToRender(defaultAmountToRender);
+      if (localMovies.length - defaultAmountToRender === 0) {
+        setIsMoreBtnVisible(false);
+      } else {
+        setIsMoreBtnVisible(true);
+      }
+      //setMovies(localMovies);
     }
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     console.log('amount', amountToRender);
   }, [amountToRender])
 
   const handleMoreBtnClick = () => {
-    const newAmount = amountToRender + Math.min((movies.length - amountToRender), 4);
+    const newAmount = amountToRender + Math.min((movies.length - amountToRender), defaultAmountToRender);
     setAmountToRender(newAmount);
-    if(movies.length - newAmount === 0) {
+    if (movies.length - newAmount === 0) {
       setIsMoreBtnVisible(false);
     }
   }
@@ -384,7 +414,7 @@ function App() {
           <ProtectedRoute exact path="/movies" component={Movies} isLoggedIn={isLoggedIn} movies={movies}
             handleSearchSubmit={handleSearch} handleTumblerClick={handleTumblerClick} saveMovie={saveMovie}
             deleteMovie={deleteMovie} isFound={isFoundInMovies} isRequestDone={isRequestDone} amountToRender={amountToRender}
-            handleMoreBtnClick={handleMoreBtnClick} isMoreBtnVisible={isMoreBtnVisible}/>
+            handleMoreBtnClick={handleMoreBtnClick} isMoreBtnVisible={isMoreBtnVisible} />
           <ProtectedRoute exact path="/saved-movies" component={SavedMovies} isLoggedIn={isLoggedIn} movies={savedMovies}
             handleSearchSubmit={handleSearchInSaved} handleTumblerClick={handleTumblerClick} saveMovie={saveMovie}
             deleteMovie={deleteMovie} isFound={isFoundInSavedMovies} isRequestDone={isRequestInSavedDone} />
