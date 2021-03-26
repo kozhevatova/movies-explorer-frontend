@@ -162,7 +162,7 @@ function App() {
 
   // обработчик поиска по всем фильмам
   const handleSearchInMovies = (query, isShortFilm) => {
-    setAmountToRender(defaultAmountToRender);
+    // setAmountToRender(defaultAmountToRender);
     searchPromise(query, isShortFilm)
       .then((res) => {
         if (res && res.length > 0) {
@@ -170,6 +170,7 @@ function App() {
           localStorage.setItem('movies', JSON.stringify(res));
           checkWidth();
           updateMovies(res);
+          console.log(res.length, amountToRender,res.length > amountToRender)
           setIsMoreBtnVisible(res.length > amountToRender);
         } else {
           setIsFoundInMovies(false);
@@ -206,6 +207,7 @@ function App() {
   }
 
   const handleSearch = (query, isShortFilm) => {
+    //setAmountToRender(defaultAmountToRender);
     isOnSavedPage ? handleSearchInSaved(query, isShortFilm) : handleSearchInMovies(query, isShortFilm);
   }
 
@@ -344,7 +346,7 @@ function App() {
   }
 
   // авторизация
-  const handleLogin = (email, password) => {
+  const handleLogin = ({email, password}) => {
     auth.authorize(email, password)
       .then((data) => {
         console.log(data);
@@ -361,7 +363,7 @@ function App() {
   }
 
   // регистрация
-  const handleRegister = (email, password, name) => {
+  const handleRegister = ({email, password, name}) => {
     auth.register(email, password, name)
       .then((res) => {
         console.log('res', res);
@@ -390,7 +392,7 @@ function App() {
   }
 
   // обработчик обновления данных пользователя
-  const handleEditProfile = (email, name) => {
+  const handleEditProfile = ({email, name}) => {
     const jwt = localStorage.getItem('jwt');
     mainApi.updateUserInfo(jwt, email, name)
       .then((res) => {

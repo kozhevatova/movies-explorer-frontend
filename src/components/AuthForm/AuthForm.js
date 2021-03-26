@@ -1,54 +1,20 @@
-import React, { useState, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import './AuthForm.css';
-import { emailInput, passwordInput, nameInput, loginType, registerType } from '../../utils/constants';
-import { validateAuthForm } from '../../utils/utils';
+import { useFormWithValidation } from '../../utils/useFormWithValidation';
 
 const AuthForm = ({ greeting, isNameVisible, buttonText, handleSubmit,
-  captionText, route, navLinkText, type }) => {
-
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const formRef = useRef();
-
-  useEffect(() => {
-    validateAuthForm(formRef.current).enableValidation();
-  }, []);
-
-  //запись в стейт текущие значения инпутов при вводе
-  const handleInputChange = (e) => {
-    switch (e.target.name) {
-      case nameInput: setName(e.target.value);
-        break;
-      case emailInput: setEmail(e.target.value);
-        break;
-      case passwordInput: setPassword(e.target.value);
-        break;
-      default:
-        console.log(`Нет такого инпута: ${e.target.name}`);
-        break;
-    }
-  }
+  captionText, route, navLinkText }) => {
+  const { values, handleChange, errors, isValid } = useFormWithValidation({});
+  
   const onSubmit = (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      return;
-    }
-    switch (type) {
-      case loginType: handleSubmit(email, password);
-        break;
-      case registerType: handleSubmit(email, password, name);
-        break;
-      default:
-        console.log(`Нет такой формы ${type}`);
-        break;
+    if (isValid) {
+      handleSubmit(values);
     }
   }
 
   return (
-    <form className="auth" method="POST" onSubmit={onSubmit} ref={formRef}>
+    <form className="auth" method="POST" onSubmit={onSubmit} noValidate>
       <NavLink to="/" className="auth__logo" />
       <h3 className="auth__greeting">{greeting}</h3>
 
@@ -56,25 +22,32 @@ const AuthForm = ({ greeting, isNameVisible, buttonText, handleSubmit,
         {isNameVisible &&
           <div className="auth__name-area">
             <label className="auth__label">Имя</label>
-            <input className="auth__input" placeholder="Имя" name="nameInput" required id="name-input"
-              minLength="2" maxLength="30" value={name} onChange={handleInputChange} />
-            <span className="auth__input-error" id="name-input-error"></span>
+            <input className={`auth__input ${errors && errors["name"] && 'auth__input_type_error'}`} 
+            placeholder="Имя" name="name" required id="name-input" minLength="2" maxLength="30"  
+            onChange={handleChange} />
+            <span className="auth__input-error" id="name-input-error">
+            {errors && errors["name"] && errors["name"]}
+            </span>
           </div>
         }
 
         <label className="auth__label">Email</label>
-        <input className="auth__input" placeholder="Email" type="email" name="emailInput" required
-          id="email-input" value={email} onChange={handleInputChange}
+        <input className={`auth__input ${errors && errors["email"] && 'auth__input_type_error'}`}
+         placeholder="Email" type="email" name="email" required id="email-input" onChange={handleChange}
           pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,})\b" />
-        <span className="auth__input-error" id="email-input-error"></span>
+        <span className="auth__input-error" id="email-input-error">
+          {errors && errors["email"] && errors["email"]}
+        </span>
 
         <label className="auth__label">Пароль</label>
-        <input className="auth__input" placeholder="Пароль" type="password" minLength="8"
-          required name="passwordInput" id="password-input" value={password} onChange={handleInputChange} />
-        <span className="auth__input-error" id="password-input-error"></span>
+        <input className={`auth__input ${errors && errors["password"] && 'auth__input_type_error'}`} placeholder="Пароль" type="password" minLength="8"
+          required name="password" id="password-input" onChange={handleChange} />
+        <span className="auth__input-error" id="password-input-error">
+        {errors && errors["password"] && errors["password"]}
+        </span>
       </div>
 
-      <button className="auth__submit-btn" type="submit">{buttonText}</button>
+      <button className="auth__submit-btn" type="submit" disabled={!isValid}>{buttonText}</button>
       <p className="auth__caption">{captionText}
         <NavLink to={route} className="auth__link">{navLinkText}</NavLink>
       </p>

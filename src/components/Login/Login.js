@@ -1,5 +1,4 @@
 import AuthForm from '../AuthForm/AuthForm';
-import { loginType } from '../../utils/constants';
 import './Login.css';
 
 const Login = ({ onLogin }) => {
@@ -13,7 +12,6 @@ const Login = ({ onLogin }) => {
         captionText="Еще не зарегистированы? "
         route="/signup"
         navLinkText="Регистрация"
-        type={loginType}
       />
     </section>
   );
