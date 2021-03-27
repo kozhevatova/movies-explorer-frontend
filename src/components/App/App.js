@@ -95,24 +95,32 @@ function App() {
   }, [history]);
 
   const checkWidth = () => {
+    let renderValue = 0;
     if (window.innerWidth >= 1280) {
       console.log('ksjdkjs');
-      setDefaultAmountToRender(4);
-      setAmountToRender(4);
+      setDefaultAmountToRender(3);
+      setAmountToRender(12);
+      renderValue = 12;
+    }
+    if (window.innerWidth >= 1024 && window.innerWidth < 1279) {
+      setDefaultAmountToRender(3);
+      setAmountToRender(9);
+      renderValue = 9;
+    }
+    if (window.innerWidth < 1024 && window.innerWidth > 480) {
+      setDefaultAmountToRender(2);
+      setAmountToRender(8);
+      renderValue = 8;
     }
     if (window.innerWidth <= 480 && window.innerWidth >= 320) {
       console.log('aww');
-      setDefaultAmountToRender(1);
-      setAmountToRender(1);
-    }
-    if (window.innerWidth < 1280 && window.innerWidth >= 1024) {
-      setDefaultAmountToRender(3);
-      setAmountToRender(3);
-    }
-    if (window.innerWidth <= 768 && window.innerWidth > 480) {
       setDefaultAmountToRender(2);
-      setAmountToRender(2);
+      setAmountToRender(5);
+      renderValue = 5;
     }
+    const localMovies = JSON.parse(localStorage.getItem('movies'));
+    setIsMoreBtnVisible(localMovies && (localMovies.length > renderValue));
+    // return { defaultValue, renderValue };
   }
 
   // обновление найденных фильмов с учетом сохраненных
@@ -127,7 +135,6 @@ function App() {
     });
     localStorage.setItem('movies', JSON.stringify(moviesWithSavedOnes));
     setMovies(moviesWithSavedOnes);
-    // setAmountToRender(defaultAmountToRender);
   };
 
   // поиск фильма среди всех по ключевым словам и фильтр короткометражек
@@ -162,7 +169,6 @@ function App() {
 
   // обработчик поиска по всем фильмам
   const handleSearchInMovies = (query, isShortFilm) => {
-    // setAmountToRender(defaultAmountToRender);
     searchPromise(query, isShortFilm)
       .then((res) => {
         if (res && res.length > 0) {
@@ -170,9 +176,8 @@ function App() {
           localStorage.setItem('movies', JSON.stringify(res));
           checkWidth();
           updateMovies(res);
-          console.log(res.length, amountToRender,res.length > amountToRender)
-          setIsMoreBtnVisible(res.length > amountToRender);
         } else {
+          localStorage.removeItem('movies');
           setIsFoundInMovies(false);
           setIsMoreBtnVisible(false);
         }
@@ -224,6 +229,7 @@ function App() {
       }
     }
     setIsRequestDone(true);
+    console.log(localMovies)
   }
 
   // фильтр короткометражек в сохраненных фильмах
@@ -244,11 +250,9 @@ function App() {
   // обработчик переключения тумблера короткометражки
   const handleTumblerClick = (isChecked, movie) => {
     if (isOnSavedPage) {
-      localStorage.setItem('isTumblerInSavedOn', isChecked);
       filterShortFilmsInSaved(isChecked);
     }
     else {
-      localStorage.setItem('isTumblerInMoviesOn', isChecked);
       filterShortFilms(isChecked, movie);
     }
   }
@@ -314,14 +318,10 @@ function App() {
       } else {
         setIsMoreBtnVisible(true);
       }
-      //setMovies(localMovies);
     }
   }
 
-  useEffect(() => {
-    console.log('amount', amountToRender);
-  }, [amountToRender])
-
+  // обработчик клика по кнопке "Еще"
   const handleMoreBtnClick = () => {
     const newAmount = amountToRender + Math.min((movies.length - amountToRender), defaultAmountToRender);
     setAmountToRender(newAmount);
@@ -330,6 +330,7 @@ function App() {
     }
   }
 
+  // открытие меню на разрешении ниже 1024px
   const openMenu = () => {
     setIsMenuOpen(true);
   }
@@ -340,13 +341,14 @@ function App() {
     setIsInfoPopupOpen(true);
   }
 
+  // закрытие меню инфо
   const closeAllPopups = () => {
     setIsMenuOpen(false);
     setIsInfoPopupOpen(false);
   }
 
   // авторизация
-  const handleLogin = ({email, password}) => {
+  const handleLogin = ({ email, password }) => {
     auth.authorize(email, password)
       .then((data) => {
         console.log(data);
@@ -363,7 +365,7 @@ function App() {
   }
 
   // регистрация
-  const handleRegister = ({email, password, name}) => {
+  const handleRegister = ({ email, password, name }) => {
     auth.register(email, password, name)
       .then((res) => {
         console.log('res', res);
@@ -392,7 +394,7 @@ function App() {
   }
 
   // обработчик обновления данных пользователя
-  const handleEditProfile = ({email, name}) => {
+  const handleEditProfile = ({ email, name }) => {
     const jwt = localStorage.getItem('jwt');
     mainApi.updateUserInfo(jwt, email, name)
       .then((res) => {
