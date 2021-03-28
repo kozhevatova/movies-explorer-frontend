@@ -3,7 +3,7 @@ import './Movies.css';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 
 const Movies = ({ movies, handleSearchSubmit, handleTumblerClick, saveMovie, deleteMovie, isFound,
-  isRequestDone, amountToRender, handleMoreBtnClick, isMoreBtnVisible }) => {
+  isRequestDone, amountToRender, handleMoreBtnClick, isMoreBtnVisible, isLoading }) => {
 
   const onMoreBtnClick = () => {
     handleMoreBtnClick(amountToRender);
@@ -13,7 +13,7 @@ const Movies = ({ movies, handleSearchSubmit, handleTumblerClick, saveMovie, del
     <section className="movies">
       <SearchForm handleSearchSubmit={handleSearchSubmit} handleTumblerClick={handleTumblerClick} />
       <MoviesCardList movieList={movies} isOnSavedPage={false} saveMovie={saveMovie} deleteMovie={deleteMovie}
-        isFound={isFound} isRequestDone={isRequestDone} amountToRender={amountToRender} />
+        isFound={isFound} isRequestDone={isRequestDone} amountToRender={amountToRender} isLoading={isLoading} />
       {isMoreBtnVisible && <button className="movies__more-btn" type="button" onClick={onMoreBtnClick}>Ещё</button>}
     </section>
   );

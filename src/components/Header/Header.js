@@ -1,7 +1,6 @@
 import './Header.css';
 import { NavLink } from 'react-router-dom';
 import Navigation from '../Navigation/Navigation';
-// import accountImg from '../../images/accountIcon.svg';
 
 const Header = ({ pathname, isLoggedIn, handleMenuOpen, handleOnSavedMoviesClick, handleOnMoviesClick }) => {
   const headerClassName = (
