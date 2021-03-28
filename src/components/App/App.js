@@ -441,7 +441,10 @@ function App() {
           openInfoPopup(updateSuccessMessage);
         }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        openInfoPopup(failMessage);
+        console.log(err)
+      })
       .finally(() => {
         setIsLoading(false);
       });
