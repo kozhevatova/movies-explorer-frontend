@@ -21,6 +21,7 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { amountToRender1024, amountToRender1280, amountToRender320, 
   amountToRender768, defaultAmountToRender1024, defaultAmountToRender1280, 
   defaultAmountToRender320, defaultAmountToRender768, failMessage, 
+  loginErrorMessage, 
   movieSearchFailedMessage, registerSuccessMessage, updateSuccessMessage } from '../../utils/constants';
 
 function App() {
@@ -386,8 +387,8 @@ function App() {
           setIsLoggedIn(true);
           history.push('/movies');
         } else {
+          openInfoPopup(loginErrorMessage);
           setIsLoggedIn(false);
-          history.push('/');
         }
       })
       .catch((err) => console.log(err.message));
