@@ -6,7 +6,7 @@ const Header = ({ pathname, isLoggedIn, handleMenuOpen, handleOnSavedMoviesClick
   const headerClassName = (
     `header 
       ${(pathname === '/movies' || pathname === '/saved-movies' || pathname==='/profile') && 'header_logged-in'}
-      ${(pathname === '/signin' || pathname === '/signup') && 'header_invisible'}
+       ${pathname=== '/' && 'header_visible'}
       `
   )
   return (

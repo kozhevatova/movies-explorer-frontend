@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
@@ -18,7 +18,10 @@ import * as auth from '../../utils/auth';
 import { checkIfIsShort, searchMovies } from '../../utils/utils';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import { failMessage, movieSearchFailedMessage, registerSuccessMessage, updateSuccessMessage } from '../../utils/constants';
+import { amountToRender1024, amountToRender1280, amountToRender320, 
+  amountToRender768, defaultAmountToRender1024, defaultAmountToRender1280, 
+  defaultAmountToRender320, defaultAmountToRender768, failMessage, 
+  movieSearchFailedMessage, registerSuccessMessage, updateSuccessMessage } from '../../utils/constants';
 
 function App() {
   const history = useHistory();
@@ -98,28 +101,28 @@ function App() {
     localStorage.removeItem('movies');
   }, [history]);
 
+  // определение количества карточек для отрисовки в зависимости от ширины экрана
   const checkWidth = () => {
     let renderValue = 0;
     if (window.innerWidth >= 1280) {
-      setDefaultAmountToRender(3);
-      setAmountToRender(12);
-      renderValue = 12;
+      setDefaultAmountToRender(defaultAmountToRender1280);
+      setAmountToRender(amountToRender1280);
+      renderValue = amountToRender1280;
     }
     if (window.innerWidth >= 1024 && window.innerWidth < 1279) {
-      setDefaultAmountToRender(3);
-      setAmountToRender(9);
-      renderValue = 9;
+      setDefaultAmountToRender(defaultAmountToRender1024);
+      setAmountToRender(amountToRender1024);
+      renderValue = amountToRender1024;
     }
     if (window.innerWidth < 1024 && window.innerWidth > 480) {
-      setDefaultAmountToRender(2);
-      setAmountToRender(8);
-      renderValue = 8;
+      setDefaultAmountToRender(defaultAmountToRender768);
+      setAmountToRender(amountToRender768);
+      renderValue = amountToRender768;
     }
     if (window.innerWidth <= 480 && window.innerWidth >= 320) {
-      console.log('aww');
-      setDefaultAmountToRender(2);
-      setAmountToRender(5);
-      renderValue = 5;
+      setDefaultAmountToRender(defaultAmountToRender320);
+      setAmountToRender(amountToRender320);
+      renderValue = amountToRender320;
     }
     const localMovies = JSON.parse(localStorage.getItem('movies'));
     setIsMoreBtnVisible(localMovies && (localMovies.length > renderValue));
@@ -374,7 +377,6 @@ function App() {
   const handleLogin = ({ email, password }) => {
     auth.authorize(email, password)
       .then((data) => {
-        console.log(data);
         if (data && data.token) {
           setCurrentUser({ email: data.email, name: data.name, _id: data._id })
           setIsLoggedIn(true);
@@ -395,7 +397,7 @@ function App() {
         if (res) {
           setIsRegisterFailed(false);
           openInfoPopup(registerSuccessMessage);
-          handleLogin(email, password);
+          handleLogin({email, password});
         } else {
           setIsRegisterFailed(true);
           openInfoPopup(failMessage);

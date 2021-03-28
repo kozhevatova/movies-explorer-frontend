@@ -1,16 +1,18 @@
 .header {
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   background-color: #5c5c5c;
   min-height: 74px;
+  display: none;
 }
 
 .header_logged-in {
   background-color: #fff;
+  display: flex;
 }
 
-.header_invisible {
-  display: none;
+.header_visible {
+  display: flex;
 }
 
 .header__container {
