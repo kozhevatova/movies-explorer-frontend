@@ -56,8 +56,12 @@ function App() {
         mainApi.getUserInfo(jwt)
       ]).then((values) => {
         const [savedMovies, userInfo] = values;
-        localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
-        setSavedMovies(savedMovies);
+        const userSavedMovies = savedMovies.filter((m) => {
+          console.log(m.owner, currentUser._id)
+          return m.owner === currentUser._id
+        })
+        localStorage.setItem('savedMovies', JSON.stringify(userSavedMovies));
+        setSavedMovies(userSavedMovies);
         setCurrentUser(userInfo);
         if (localStorage.getItem('beatFilmMovies')) {
           setBeatfilmMovies(JSON.parse(localStorage.getItem('beatFilmMovies')));
@@ -69,7 +73,7 @@ function App() {
         });
     }
 
-  }, [isLoggedIn]);
+  }, [isLoggedIn, currentUser._id]);
 
   useEffect(() => {
     window.addEventListener('resize', checkWidth);
@@ -393,7 +397,6 @@ function App() {
   const handleRegister = ({ email, password, name }) => {
     auth.register(email, password, name)
       .then((res) => {
-        console.log('res', res);
         if (res) {
           setIsRegisterFailed(false);
           openInfoPopup(registerSuccessMessage);
@@ -415,6 +418,11 @@ function App() {
     setIsLoggedIn(false);
     setCurrentUser({});
     localStorage.removeItem('jwt');
+    localStorage.removeItem('movies');
+    localStorage.removeItem('savedMovies');
+    localStorage.removeItem('beatFilmMovies');
+    setMovies([]);
+    setIsMoreBtnVisible(false);
     history.push('/');
   }
 
