@@ -1,3 +1,5 @@
+import { shortMovieDuration } from "./constants";
+
 const convertMinToHours = (min) => {
   return `${Math.floor(min/60)}ч${min % 60}м`
 }
@@ -8,7 +10,7 @@ const checkMovieTitle = (movie, query) => {
 }
 
 const checkIfIsShort = (movie) => {
-  return movie.duration <= 40;
+  return movie.duration <= shortMovieDuration;
 }
 
 const searchMovies = (movies,query) => {

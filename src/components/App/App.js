@@ -49,16 +49,16 @@ function App() {
   const [isOnSavedPage, setIsOnSavedPage] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
+    // setIsLoading(true);
     const jwt = localStorage.getItem('jwt');
     if (isLoggedIn) {
+      setIsLoading(true);
       Promise.all([
         mainApi.getMovies(jwt),
         mainApi.getUserInfo(jwt)
       ]).then((values) => {
         const [savedMovies, userInfo] = values;
         const userSavedMovies = savedMovies.filter((m) => {
-          console.log(m.owner, currentUser._id)
           return m.owner === currentUser._id
         })
         localStorage.setItem('savedMovies', JSON.stringify(userSavedMovies));
@@ -462,17 +462,18 @@ function App() {
           <ProtectedRoute path="/movies" component={Movies} isLoggedIn={isLoggedIn} movies={movies}
             handleSearchSubmit={handleSearch} handleTumblerClick={handleTumblerClick} saveMovie={saveMovie}
             deleteMovie={deleteMovie} isFound={isFoundInMovies} isRequestDone={isRequestDone} amountToRender={amountToRender}
-            handleMoreBtnClick={handleMoreBtnClick} isMoreBtnVisible={isMoreBtnVisible} isLoading={isLoading} />
+            handleMoreBtnClick={handleMoreBtnClick} isMoreBtnVisible={isMoreBtnVisible} isLoading={isLoading} isDisabled={isLoading}/>
           <ProtectedRoute path="/saved-movies" component={SavedMovies} isLoggedIn={isLoggedIn} movies={savedMovies}
             handleSearchSubmit={handleSearchInSaved} handleTumblerClick={handleTumblerClick} saveMovie={saveMovie}
-            deleteMovie={deleteMovie} isFound={isFoundInSavedMovies} isRequestDone={isRequestInSavedDone} isLoading={isLoading} />
+            deleteMovie={deleteMovie} isFound={isFoundInSavedMovies} isRequestDone={isRequestInSavedDone} isLoading={isLoading} 
+            isDisabled={isLoading}/>
           <ProtectedRoute path="/profile" component={Profile} isLoggedIn={isLoggedIn} handleLogout={handleLogout}
-            handleSubmit={handleEditProfile} isLoading={isLoading} />
+            handleSubmit={handleEditProfile} isLoading={isLoading} isDisabled={isLoading}/>
           <Route path="/signin">
-            <Login onLogin={handleLogin} />
+            <Login onLogin={handleLogin} isDisabled={isLoading}/>
           </Route>
           <Route path="/signup">
-            <Register onRegister={handleRegister} />
+            <Register onRegister={handleRegister} isDisabled={isLoading}/>
           </Route>
           <Route path="*">
             <NotFoundPage />

@@ -1,7 +1,7 @@
 import AuthForm from '../AuthForm/AuthForm';
 import './Register.css';
 
-const Register = ({ onRegister }) => {
+const Register = ({ onRegister, isDisabled }) => {
   return(
     <section className="register">
       <AuthForm
@@ -12,6 +12,7 @@ const Register = ({ onRegister }) => {
       captionText="Уже зарегистрированы? "
       route="/signin"
       navLinkText="Войти"
+      isDisabled={isDisabled}
     />
     </section>
     

@@ -1,7 +1,7 @@
 import AuthForm from '../AuthForm/AuthForm';
 import './Login.css';
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin, isDisabled }) => {
   return (
     <section className="login">
       <AuthForm
@@ -12,6 +12,7 @@ const Login = ({ onLogin }) => {
         captionText="Еще не зарегистированы? "
         route="/signup"
         navLinkText="Регистрация"
+        isDisabled={isDisabled}
       />
     </section>
   );

@@ -17,9 +17,11 @@ const defaultAmountToRender320 = 2;
 
 const defaultProp = 'default';
 
+const shortMovieDuration = 40;
+
 export { shortFilmCheckbox, movieInput, registerSuccessMessage,
   failMessage, updateSuccessMessage, loginErrorMessage, movieSearchFailedMessage, defaultProp,
   amountToRender1280, amountToRender1024, amountToRender768, amountToRender320,
   defaultAmountToRender1280, defaultAmountToRender1024, defaultAmountToRender768,
-  defaultAmountToRender320
+  defaultAmountToRender320, shortMovieDuration
 };
