@@ -99,13 +99,7 @@
   color: #ee3465;
   min-height: 12px;
   margin: 0;
-  visibility: hidden;
   width: 100%;
-}
-
-.profile__input-error_active {
-  background-color: #fff;
-  visibility: visible;
 }
 
 .profile__button {
@@ -130,7 +124,7 @@
   outline: none;
 }
 
-.profile__button_disabled {
+.profile__button:disabled {
   opacity: 0.2;
 }
 

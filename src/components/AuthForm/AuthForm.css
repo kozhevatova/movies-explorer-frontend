@@ -79,11 +79,6 @@
   color: #ee3465;
   min-height: 12px;
   margin: 0 0 5px 0;
-  visibility: hidden;
-}
-
-.auth__input-error_active {
-  visibility: visible;
 }
 
 .auth__submit-btn {
@@ -106,7 +101,7 @@
   cursor: pointer;
 }
 
-.auth__submit-btn_disabled {
+.auth__submit-btn:disabled {
   opacity: 0.2;
 }
 

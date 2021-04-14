@@ -32,14 +32,20 @@
   font-size: 14px;
   line-height: 1.2;
   text-align: center;
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
   color: #2be080;
-  text-decoration: none;
   transition: opacity 0.6s linear;
 }
 
 .not-found__link:hover {
   opacity: 0.7;
   cursor: pointer;
+}
+
+.not-found__link:focus {
+  outline: none;
 }
 
 @media screen and (min-width: 768px) and (max-width: 1023px) {
