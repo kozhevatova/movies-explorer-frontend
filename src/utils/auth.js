@@ -1,4 +1,5 @@
-export const BASE_URL = "https://api.annakin.diploma.students.nomoredomains.monster";
+// export const BASE_URL = "https://api.annakin.diploma.students.nomoredomains.monster";
+export const BASE_URL = "https://movie-explorer-api.herokuapp.com";
 
 export const register = (email, password, name) => {
   return fetch(`${BASE_URL}/signup`, {
