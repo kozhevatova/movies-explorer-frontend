@@ -88,8 +88,7 @@ class MainApi {
 };
 
 const mainApi = new MainApi({
-  // baseUrl: "https://api.annakin.diploma.students.nomoredomains.monster"
-  baseUrl: "https://movie-explorer-api.herokuapp.com"
+  baseUrl: "https://api.annakin.diploma.students.nomoredomains.monster"
 });
 
 export default mainApi;
