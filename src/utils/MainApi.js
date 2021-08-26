@@ -88,7 +88,8 @@ class MainApi {
 };
 
 const mainApi = new MainApi({
-  baseUrl: "https://api.annakin.diploma.students.nomoredomains.monster"
+  // baseUrl: "https://api.annakin.diploma.students.nomoredomains.monster"
+  baseUrl: "https://localhost:3000"
 });
 
 export default mainApi;
